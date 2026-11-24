@@ -13,7 +13,7 @@ button,input{font:inherit;color:var(--fg)}
 .tabs{display:flex;gap:6px;margin-bottom:10px}
 .tabs button{flex:1;padding:8px 4px;border:1px solid var(--bd);background:var(--l0);border-radius:8px;cursor:pointer}
 .tabs button.on{background:var(--acc);color:var(--bg);border-color:var(--acc);font-weight:600}
-.score{display:flex;gap:10px;align-items:baseline;margin-bottom:6px}.score span{margin-left:auto}#shb{padding:5px 10px;border:1px solid var(--bd);background:var(--l0);border-radius:8px;cursor:pointer;align-self:center}
+.score{display:flex;gap:10px;align-items:baseline;margin-bottom:6px}.score span{margin-left:auto}#shb,#rkc{padding:5px 10px;border:1px solid var(--bd);background:var(--l0);border-radius:8px;cursor:pointer;align-self:center}
 .score b{font-size:26px}.score span{color:var(--mut);font-size:13px}
 #q{width:100%;padding:8px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--l0);margin-bottom:8px}
 #mw{position:relative}
@@ -37,29 +37,37 @@ summary{cursor:pointer;margin-bottom:6px;font-weight:600}
 .b0{background:var(--l0)}.b1{background:var(--l1);color:#222}.b2{background:var(--l2);color:#222}.b3{background:var(--l3);color:#222}.b4{background:var(--l4);color:#222}.b5{background:var(--l5);color:#222}
 .foot{margin-top:12px}.foot button{padding:7px 12px;border:1px solid var(--bd);background:var(--l0);border-radius:8px;cursor:pointer}
 .h{color:var(--mut);font-size:12px;margin:8px 0 0}
-#lb .cd{border:1px solid var(--bd);border-radius:10px;padding:10px;margin-bottom:12px}
-#lb h2{font-size:16px;margin:0 0 6px}#lb h3{font-size:15px;margin:0 0 6px;display:flex;justify-content:space-between;align-items:baseline}#lb h3 span{color:var(--mut);font-size:12px;font-weight:400}
-#lb p{margin:4px 0}#lb .mu{color:var(--mut);font-size:13px}
-#lb .row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;align-items:center}
-#lb button,#lb input{padding:7px 10px;border:1px solid var(--bd);background:var(--l0);border-radius:8px}#lb button{cursor:pointer}#lb button:disabled{opacity:.5;cursor:default}
-#lb button.pr{background:var(--acc);color:var(--bg);border-color:var(--acc);font-weight:600}
-#lb input.pin{width:9em;letter-spacing:.2em}#lb input.ln{flex:1;min-width:0;font-size:12px}
-#lb .ms{padding:8px 10px;border-radius:8px;background:var(--l3);color:#222;margin-bottom:10px;font-size:14px}
-#lb ol{list-style:none;margin:0;padding:0;max-height:340px;overflow:auto}
-#lb li{display:grid;grid-template-columns:3.2em 1fr auto;gap:8px;padding:6px 4px;border-top:1px solid var(--bd);font-size:14px}
-#lb li:first-child{border-top:0}#lb li .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#lb li .sc{color:var(--mut);white-space:nowrap}
-#lb li.me{background:var(--l2);color:#222;border-radius:6px;font-weight:600}#lb li.me .sc{color:#222}#lb li.gap{display:block;text-align:center;color:var(--mut);border-top:0}
-#shd{border:1px solid var(--bd);border-radius:12px;background:var(--bg);color:var(--fg);padding:14px;width:min(440px,calc(100vw - 32px));max-height:calc(100vh - 32px)}#shd::backdrop{background:rgba(0,0,0,.5)}
-#shd h2{font-size:17px;margin:0 0 8px}#shd p{margin:10px 0 4px}#shd .mu{color:var(--mut);font-size:13px}#shd img{width:100%;border-radius:10px;display:block}
-#shd .row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}#shd button,#shd input{padding:7px 10px;border:1px solid var(--bd);background:var(--l0);border-radius:8px}#shd button{cursor:pointer}#shd button:disabled{opacity:.5}
-#shd button.pr{background:var(--acc);color:var(--bg);border-color:var(--acc);font-weight:600}#shd input.ln{flex:1}#shd input.pin{width:9em;letter-spacing:.2em}#shd .ms{padding:8px 10px;border-radius:8px;background:var(--l3);color:#222;margin-top:10px;font-size:14px}
+.ui button,.ui input,.ui textarea{font:inherit;color:var(--fg);padding:8px 12px;border:1px solid var(--bd);background:var(--l0);border-radius:8px}
+.ui button{cursor:pointer}.ui button:disabled{opacity:.5;cursor:default}
+.ui button.pr{background:var(--acc);color:var(--bg);border-color:var(--acc);font-weight:600}
+.ui button.ic{width:40px;padding:8px 0}.ui button.lk{border:0;background:none;padding:6px 2px;text-decoration:underline;text-underline-offset:3px}
+.ui .dz{color:var(--l5)}.ui button.pr.dz{background:var(--l5);border-color:var(--l5);color:#fff}
+.ui input.wide{flex:1;min-width:0}.ui input.pin{width:8.5em;letter-spacing:.15em}
+.ui .row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.ui .acts{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;margin-top:14px}
+.ui .mu{color:var(--mut);font-size:13px}.ui .sm{font-size:12px}.ui .ctr{text-align:center;padding:20px 0}
+.ui .er,.ui .okm,.ui .wn{padding:8px 10px;border-radius:8px;margin-top:10px;font-size:14px}.ui .er{background:var(--l5);color:#fff}.ui .okm{background:var(--l2);color:#222}.ui .wn{background:var(--l3);color:#222}
+.seg{display:flex;gap:2px;padding:3px;border:1px solid var(--bd);border-radius:10px;margin:0 0 10px;background:var(--l0)}
+.ui .seg button{flex:1;border:0;background:none;padding:6px 4px;color:var(--mut);border-radius:7px}.ui .seg button.on{background:var(--acc);color:var(--bg);font-weight:600}
+#lb .you{display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--bd);border-radius:12px;margin-bottom:12px}
+#lb .you .tx{flex:1;min-width:0}#lb .you b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#lb .you small{color:var(--mut);font-size:13px}
+#lb ol{list-style:none;margin:0;padding:0}
+#lb li{display:grid;grid-template-columns:2.8em 1fr auto;gap:8px;padding:8px 6px;border-top:1px solid var(--bd);font-size:14px}#lb li:first-child{border-top:0}
+#lb li .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#lb li .sc{color:var(--mut);white-space:nowrap}
+#lb li.me{background:var(--l2);color:#222;border-radius:8px;font-weight:600;border-top-color:transparent}#lb li.me .sc{color:#222}#lb li.me+li{border-top-color:transparent}
+#lb li.gap{display:block;text-align:center;color:var(--mut);padding:2px}#lb .ft{color:var(--mut);font-size:12px;text-align:center;margin:12px 0 0}
+#dlg{border:1px solid var(--bd);border-radius:14px;background:var(--bg);color:var(--fg);padding:16px;width:min(420px,calc(100vw - 32px));max-height:calc(100dvh - 32px)}
+#dlg #dlx{position:absolute;top:8px;right:8px;border:0;background:none;color:var(--mut);font-size:16px;padding:6px 9px}#dlg h2{padding-right:28px}#dlg::backdrop{background:rgba(0,0,0,.5)}#dlg h2{font-size:18px;margin:0 0 6px}#dlg p{margin:6px 0}#dlg img{width:100%;border-radius:10px;display:block}
+#dlg .ph{aspect-ratio:1;border-radius:10px;background:var(--l0);display:grid;place-items:center;color:var(--mut);font-size:14px}
+#dlg label{display:block;font-weight:600;font-size:14px;margin:14px 0 0}#dlg hr{border:0;border-top:1px solid var(--bd);margin:16px 0 4px}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,8px);max-width:calc(100vw - 32px);width:max-content;background:var(--acc);color:var(--bg);padding:10px 14px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:10}
+#toast.on{opacity:1;transform:translate(-50%,0)}
 .cr{color:var(--mut);font-size:12px;margin:18px 0 4px;text-align:center}.cr a{color:inherit}
 </style></head><body>
 <h1>Travel Globe</h1>
 <div class="tabs" id="tabs"></div>
-<section id="lb" style="display:none"><div id="lbc"></div><div id="lbts"></div></section>
-<div class="score" id="scr"><b id="pts"></b><span id="sub"></span><button id="shb">📤 Share</button></div>
-<dialog id="shd"><div id="shc"></div></dialog>
+<section id="lb" class="ui" style="display:none"><div id="lbc"></div></section>
+<div class="score" id="scr"><b id="pts"></b><span id="sub"></span><button id="rkc" style="display:none"></button><button id="shb">📤 Share</button></div>
+<dialog id="dlg" class="ui"><button id="dlx" type="button" aria-label="Close">✕</button><div id="dlc"></div><div id="tsb"></div></dialog><div id="toast" role="status" aria-live="polite"></div>
 <details id="key"><summary>Point key</summary><div class="legend" id="legend"></div></details>
 <input id="q" list="dl" placeholder="Search a country…" autocomplete="off"><datalist id="dl"></datalist>
 <div id="mw">
@@ -143,7 +151,7 @@ function panel(){
 }
 function score(){
  if(!S[cur])return;var L=IT[cur],t=0,n=0;L.forEach(function(i){var v=S[cur][i.k]||0;t+=v;if(v)n++;});
- $("pts").textContent=t+" pts";$("sub").textContent=n+" of "+L.length+" · max "+L.length*5;
+ $("pts").textContent=t+" pts";if(window.LB)LB.chip();$("sub").textContent=n+" of "+L.length+" · max "+L.length*5;
 }
 function tiles(){
  if(!S[cur])return;var g=$("grid");g.innerHTML="";
@@ -248,142 +256,163 @@ render();
 if(ok)startAm();
 </script>
 <script>
-/* Leaderboard: talks to /api (src/worker.js). Joined state lives in localStorage "tg3me". */
+/* Leaderboard UI + sync. Talks to /api (src/worker.js). This browser's entry lives in localStorage "tg3me". */
 var LB=(function(){
- var ME=null,MR=null,CFG=null,BD=null,BDt=0,claim=null,busy=0,msg="",sT=0,sv=0,form=null;
- var NAMES={world:"🌍 Globe",us:"🇺🇸 US states",ca:"🇨🇦 Canada"};
+ var ME=null,MR=null,CFG=null,BD=null,BDt=0,sT=0,sv=0,bt="world",D={},TT=0;
+ var TN={world:"Globe",us:"US states",ca:"Canada"};
  try{ME=JSON.parse(localStorage.getItem("tg3me")||"null");}catch(e){}
  function setME(m){ME=m;try{m?localStorage.setItem("tg3me",JSON.stringify(m)):localStorage.removeItem("tg3me");}catch(e){}}
  function dirty(v){try{if(v===undefined)return localStorage.getItem("tg3dirty")==="1";v?localStorage.setItem("tg3dirty","1"):localStorage.removeItem("tg3dirty");}catch(e){}}
  function call(m,p,b,au){var h={};if(b)h["content-type"]="application/json";if(au&&ME)h.authorization="Bearer "+ME.dev;
   return fetch("/api"+p,{method:m,headers:h,body:b?JSON.stringify(b):undefined,cache:p==="/board"?"default":"no-store"}).then(function(r){
    return r.json().catch(function(){return{};}).then(function(j){if(!r.ok){var e=new Error(j.error||"Something went wrong ("+r.status+")");e.status=r.status;throw e;}return j;});});}
+ function wait(ms){return new Promise(function(r){setTimeout(r,ms);});}
+ function put(b){return call("PUT","/me",b,1).catch(function(e){if(e.status!==429)throw e;return wait(1200).then(function(){return call("PUT","/me",b,1);});});}
  function mapData(){return{world:S.world,us:S.us,ca:S.ca};}
+ function hasLocal(){return["world","us","ca"].some(function(t){return Object.keys(S[t]).length;});}
  function useData(d){S.world=d.world||{};S.us=d.us||{};S.ca=d.ca||{};save();if(cur!=="board")render();}
- function meIn(j){MR=j;if(ME&&j.name&&ME.name!==j.name){ME.name=j.name;setME(ME);}}
- function link(){return location.origin+location.pathname+"#me="+ME.id+"."+ME.link;}
- function lost(){setME(null);MR=null;dirty(0);msg="This device was signed out of the leaderboard (the edit link was renewed, or the entry was deleted). Your map is still saved on this device.";draw();}
- function fail(e){if(e&&e.status===401&&ME)return lost();msg=e&&e.message||"Something went wrong.";draw();}
- function act(f){if(busy)return;busy=1;msg="";draw();Promise.resolve().then(f).catch(fail).then(function(){busy=0;draw();});}
+ function meIn(j){MR=j;if(ME&&j.name&&ME.name!==j.name){ME.name=j.name;setME(ME);}chip();}
+ function site(){return location.origin+location.pathname;}
+ function link(){return site()+"#me="+ME.id+"."+ME.link;}
+ function local(t){var p=0,n=0;IT[t].forEach(function(i){var v=S[t][i.k]||0;p+=v;if(v)n++;});if(!IT[t].length)for(var k in S[t]){p+=S[t][k];n++;}return{pts:p,n:n};}
+ function toast(m){var t=$("toast"),d=$("dlg");(d.open?d:document.body).appendChild(t);t.textContent=m;t.className="on";clearTimeout(TT);TT=setTimeout(function(){t.className="";},3500);}
+ function copy(s,m){var ok=function(){toast(m);},bad=function(){var a=el("textarea");a.value=s;($("dlg").open?$("dlg"):document.body).appendChild(a);a.select();try{document.execCommand("copy");ok();}catch(e){prompt("Copy this:",s);}a.remove();};
+  if(navigator.clipboard)navigator.clipboard.writeText(s).then(ok,bad);else bad();}
+ function lost(){setME(null);MR=null;dirty(0);chip();draw();toast("This device was signed out of the leaderboard. Your map is still here.");}
  function human(){return new Promise(function(res,rej){if(!CFG||!CFG.ts)return res("");
-  function go(){var box=$("lbts");box.innerHTML="";var w=turnstile.render(box,{sitekey:CFG.ts,appearance:"interaction-only",
+  function go(){var box=$("tsb");box.innerHTML="";var w=turnstile.render(box,{sitekey:CFG.ts,appearance:"interaction-only",
    callback:function(t){res(t);setTimeout(function(){try{turnstile.remove(w);}catch(e){}},0);},
-   "error-callback":function(){rej(new Error("Verification failed. Please try again."));}});}
+   "error-callback":function(){rej(new Error("The verification check failed. Please try again."));}});}
   if(window.turnstile)return go();var s=document.createElement("script");s.src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
   s.onload=go;s.onerror=function(){rej(new Error("Could not load the verification check."));};document.head.appendChild(s);});}
- /* ---- syncing: edits are pushed 2.5 s after the last change; on load, server wins unless this device has unsent edits ---- */
+
+ /* ---- sync: edits go up 2.5 s after the last change; on load the server copy wins unless this device has unsent edits ---- */
  function touch(){if(!ME)return;dirty(1);sv++;clearTimeout(sT);sT=setTimeout(push,2500);}
  function push(){if(!ME)return Promise.resolve();var v=sv;clearTimeout(sT);
   return call("PUT","/me",{data:mapData()},1).then(function(j){if(v===sv)dirty(0);meIn(j);draw();})
    .catch(function(e){if(e.status===401)return lost();sT=setTimeout(push,e.status===429?3000:30000);});}
  function pull(){return call("GET","/me",null,1).then(function(j){meIn(j);if(dirty())return push();useData(j.data);}).catch(function(e){if(e.status===401)lost();});}
- /* ---- actions ---- */
- function join(){act(function(){return human().then(function(ts){return call("POST","/join",{ts:ts,data:mapData()});}).then(function(j){
-  setME({id:j.id,dev:j.device,tag:j.tag,name:j.name});dirty(0);meIn(j);BDt=0;loadBoard();});});}
- function rename(){var n=prompt("Your leaderboard name (2–24 characters):",MR?MR.name:"");if(n==null)return;
-  act(function(){return call("PUT","/me",{name:n},1).then(function(j){meIn(j);BDt=0;loadBoard();});});}
- function reroll(){act(function(){return call("PUT","/me",{reroll:true},1).then(function(j){meIn(j);BDt=0;loadBoard();});});}
- function setPin(p1,p2,old){if(!/^\d{4,8}$/.test(p1))return fail(new Error("PIN must be 4–8 digits."));if(p1!==p2)return fail(new Error("The two PINs don't match."));
-  act(function(){var b={pin:p1};if(MR.hasPin){b.link=ME.link;b.oldPin=old;}return call("POST","/pin",b,1).then(function(j){ME.link=j.link;setME(ME);meIn(j);form=null;msg=b.oldPin!==undefined?"PIN changed.":"PIN set. Save your edit link below.";});});}
- function relink(pin){act(function(){return call("POST","/relink",{link:ME.link,pin:pin},1).then(function(j){ME.link=j.link;setME(ME);meIn(j);form=null;msg="New edit link created. The old link no longer works and your other devices were signed out.";});});}
- function leave(){if(!confirm("Remove your entry from the leaderboard? Your map stays on this device, but the edit link stops working."))return;
-  act(function(){return call("DELETE","/me",null,1).then(function(){setME(null);MR=null;dirty(0);BDt=0;loadBoard();msg="You left the leaderboard.";});});}
- function doClaim(pin){var has=["world","us","ca"].some(function(t){return Object.keys(S[t]).length;});
-  if((ME||has)&&!confirm((ME?"This device is already on the leaderboard as "+ME.name+". ":"")+"Opening the saved entry replaces the map on this device. Continue?"))return;
-  act(function(){return human().then(function(ts){return call("POST","/claim",{id:claim.id,link:claim.link,pin:pin,ts:ts});}).then(function(j){
-   setME({id:j.id,dev:j.device,tag:j.tag,name:j.name,link:claim.link});claim=null;dirty(0);meIn(j);useData(j.data);msg="Welcome back, "+j.name+"! Your map is now on this device.";});});}
  function loadBoard(){if(!CFG||Date.now()-BDt<30000)return;BDt=Date.now();call("GET","/board").then(function(j){BD=j;draw();}).catch(function(){BDt=0;});}
- /* ---- view ---- */
- function E(t,c,x,f){var e=el(t,c,x);if(f)e.onclick=f;if(t==="button"&&busy)e.disabled=true;return e;}
- function pinIn(ph){var i=el("input","pin");i.type="password";i.inputMode="numeric";i.autocomplete="off";i.maxLength=8;i.placeholder=ph||"PIN";return i;}
+
+ /* ---- small view helpers ---- */
+ function B(x,cl,f,dis){var b=el("button",cl||"",x);b.type="button";b.onclick=f;if(dis)b.disabled=true;return b;}
+ function pinIn(ph){var i=el("input","pin");i.type="password";i.inputMode="numeric";i.autocomplete="off";i.maxLength=8;i.placeholder=ph||"PIN";i.setAttribute("aria-label",i.placeholder);return i;}
  function row(){var r=el("div","row");[].slice.call(arguments).forEach(function(x){r.appendChild(x);});return r;}
- function rk(t){var r=MR&&MR.ranks&&MR.ranks[t];return r&&r.rank?"#"+r.rank+" of "+r.total:"–";}
- function li(rank,name,r,me){var x=el("li",me?"me":"");x.appendChild(el("span","","#"+rank));x.appendChild(el("span","nm",name+(me?" (you)":"")));x.appendChild(el("span","sc",r.p+" pts · "+r.n));return x;}
+ function acts(c){var r=el("div","acts");[].slice.call(arguments,1).forEach(function(x){r.appendChild(x);});c.appendChild(r);}
+ function enter(i,f){i.addEventListener("keydown",function(e){if(e.key==="Enter")f();});}
+ function seg(sel,f,dis){var s=el("div","seg");["world","us","ca"].forEach(function(t){s.appendChild(B(TN[t],t===sel?"on":"",function(){if(t!==sel)f(t);},dis));});return s;}
+
+ /* ---- popup (one <dialog>, several views) ---- */
+ function dlg(v,o){D=o||{};D.v=v;D.err="";D.ok="";D.busy=0;ddraw();var d=$("dlg");if(!d.open)d.showModal();}
+ function dclose(){var d=$("dlg");if(d.open)d.close();}
+ function sub(s){D.sub=s;D.err="";D.ok="";ddraw();}
+ function run(p,ok){D.busy=1;D.err="";D.ok="";ddraw();var v=D;
+  return p.then(function(r){if(D!==v)return;D.busy=0;if(ok)ok(r);ddraw();},function(e){if(D!==v)return;D.busy=0;if(e&&e.status===401&&ME){dclose();lost();return;}D.err=e&&e.message||"Something went wrong.";ddraw();});}
+ function ddraw(){var c=$("dlc");c.innerHTML="";var v=D.v,dis=!!D.busy;if(!v)return;
+  var H=function(t){c.appendChild(el("h2","",t));},P=function(t,cl){c.appendChild(el("p",cl||"",t));},L=function(t){c.appendChild(el("label","",t));},R=function(){c.appendChild(row.apply(null,arguments));};
+  if(v==="claim"){H("Welcome back");P("Enter your PIN to bring your leaderboard entry and map to this device.","mu");
+   if(hasLocal())P("This replaces the map that's on this device now.","wn");
+   var p=pinIn();R(p);enter(p,function(){claimGo(p.value);});
+   acts(c,B("Cancel","",dclose),B(dis?"Opening…":"Open","pr",function(){claimGo(p.value);},dis));setTimeout(function(){p.focus();},0);}
+  else if(v==="name"){H(D.share?"Share your score":"Join the leaderboard");
+   P(D.share?"First, pick the name shown next to your score on the public leaderboard.":"Pick the name shown next to your score. No account or email needed.","mu");
+   var n=el("input","wide");n.maxLength=24;n.placeholder="Your name";n.autocomplete="nickname";n.value=D.nm||"";n.setAttribute("aria-label","Your name");R(n);
+   P("Leave it empty for a random name like “Teal Falcon 2390”. You can change it any time.","mu sm");
+   var nx=function(){nameGo(n.value.trim());};enter(n,nx);
+   acts(c,B("Cancel","",dclose),B(dis?"Joining…":D.share?"Next":"Join","pr",nx,dis));setTimeout(function(){n.focus();},0);}
+  else if(v==="pin"){H("Want it on your other devices?");
+   P("Set a PIN and you'll get a private edit link. Open it on another device, enter the PIN, and your map comes along.","mu");
+   var a=pinIn("PIN"),b=pinIn("Repeat PIN");R(a,b);var sp=function(){pinGo(a.value,b.value);};enter(b,sp);
+   acts(c,B("Skip","",function(){D.after();},dis),B(dis?"Saving…":"Set PIN","pr",sp,dis));setTimeout(function(){a.focus();},0);}
+  else if(v==="img"){H("Share your score");c.appendChild(seg(D.t,function(t){D.t=t;makeImg();},dis));
+   if(D.img){var im=el("img");im.src=D.img.url;im.alt="Travel Globe score card";c.appendChild(im);
+    var f=new File([D.img.blob],"travel-globe-"+D.t+".png",{type:"image/png"}),sh=navigator.canShare&&navigator.canShare({files:[f]}),bs=[];
+    bs.push(B("Copy link","",function(){copy(site(),"Link copied");}));
+    bs.push(B("Download",sh?"":"pr",function(){var a=el("a");a.href=D.img.url;a.download=f.name;document.body.appendChild(a);a.click();a.remove();}));
+    if(sh)bs.push(B("Share…","pr",function(){navigator.share({files:[f],text:D.img.text+" "+site()}).catch(function(){});}));
+    acts.apply(null,[c].concat(bs));
+    if(D.pinNew)P("Your private edit link is saved under ⚙ on the Board tab.","mu sm");}
+   else if(!D.err)c.appendChild(el("div","ph","Creating your image…"));}
+  else if(v==="me"){H("Your entry");
+   L("Name");var n2=el("input","wide");n2.maxLength=24;n2.value=D.nm!=null?D.nm:ME.name;n2.setAttribute("aria-label","Name");
+   var sv2=function(){saveName(n2.value.trim());};enter(n2,sv2);var dice=B("🎲","ic",function(){saveName(null);},dis);dice.title="Random name";dice.setAttribute("aria-label","Random name");
+   R(n2,B("Save","",sv2,dis),dice);
+   L("Other devices");
+   if(!MR||!MR.hasPin){
+    if(D.sub!=="setpin"){P("Set a PIN to get a private edit link, so you can open your map on another device.","mu");R(B("Set a PIN","",function(){sub("setpin");}));}
+    else{var a2=pinIn("PIN"),b2=pinIn("Repeat PIN");R(a2,b2);acts(c,B("Cancel","",function(){sub(null);}),B(dis?"Saving…":"Save PIN","pr",function(){pinGo(a2.value,b2.value);},dis));}}
+   else if(!ME.link)P("Your edit link is on the device where you set the PIN.","mu");
+   else{R(B("Copy edit link","",function(){copy(link(),"Edit link copied. Keep it private.");}));
+    P("Open it on another device and enter your PIN. Lose the link or forget the PIN and the entry can't be recovered.","mu sm");
+    if(D.sub==="chpin"){var o=pinIn("Current PIN"),n3=pinIn("New PIN"),n4=pinIn("Repeat");R(o,n3,n4);acts(c,B("Cancel","",function(){sub(null);}),B("Change PIN","pr",function(){chPin(o.value,n3.value,n4.value);},dis));}
+    else if(D.sub==="relink"){P("The new link replaces the old one and signs out your other devices.","mu sm");var q=pinIn("PIN");R(q);acts(c,B("Cancel","",function(){sub(null);}),B("Make new link","pr",function(){relink(q.value);},dis));}
+    else R(B("Change PIN","lk",function(){sub("chpin");}),B("Replace link","lk",function(){sub("relink");}));}
+   c.appendChild(el("hr"));
+   if(D.sub==="leave"){P("Remove your entry from the leaderboard? Your map stays on this device.");acts(c,B("Cancel","",function(){sub(null);}),B(dis?"Removing…":"Remove","pr dz",leave,dis));}
+   else R(B("Leave leaderboard","lk dz",function(){sub("leave");}));
+   if(D.ok)c.appendChild(el("div","okm",D.ok));
+   if(!D.sub)acts(c,B("Done","pr",dclose));}
+  if(D.err)c.appendChild(el("div","er",D.err));}
+
+ /* ---- actions ---- */
+ function pinOk(a,b){if(!/^\d{4,8}$/.test(a)){D.err="PIN must be 4–8 digits.";ddraw();return false;}if(a!==b){D.err="The two PINs don't match.";ddraw();return false;}return true;}
+ function joined(j,link){setME({id:j.id,dev:j.device,tag:j.tag,name:j.name,link:link});dirty(0);meIn(j);BDt=0;loadBoard();draw();}
+ function nameGo(nm){D.nm=nm;run(human().then(function(ts){return call("POST","/join",{ts:ts,data:mapData(),name:nm||undefined});}),function(j){joined(j);
+  if(!D.share){dclose();toast("You're on the leaderboard as "+j.name+".");return;}
+  ME.asked=1;setME(ME);D.v="pin";D.after=function(){D.v="img";makeImg();};});}
+ function pinGo(a,b){if(!pinOk(a,b))return;run(call("POST","/pin",{pin:a},1),function(j){ME.link=j.link;ME.asked=1;setME(ME);meIn(j);
+  if(D.v==="pin"){D.pinNew=1;D.after();}else{D.sub=null;D.ok="PIN set. Use “Copy edit link” and keep the link somewhere safe.";}});}
+ function chPin(o,a,b){if(!pinOk(a,b))return;run(call("POST","/pin",{pin:a,link:ME.link,oldPin:o},1),function(j){meIn(j);D.sub=null;D.ok="PIN changed.";});}
+ function relink(p){run(call("POST","/relink",{link:ME.link,pin:p},1),function(j){ME.link=j.link;setME(ME);meIn(j);D.sub=null;D.ok="New link made. Copy it again. The old one no longer works.";});}
+ function saveName(nm){if(nm!==null&&nm===ME.name)return;D.nm=nm;run(put(nm===null?{reroll:true}:{name:nm}),function(j){meIn(j);D.nm=null;D.ok="Name saved.";BDt=0;loadBoard();draw();});}
+ function leave(){run(call("DELETE","/me",null,1),function(){setME(null);MR=null;dirty(0);chip();BDt=0;loadBoard();draw();dclose();toast("You left the leaderboard.");});}
+ function claimGo(pin){var id=D.id,lk=D.link;run(human().then(function(ts){return call("POST","/claim",{id:id,link:lk,pin:pin,ts:ts});}),function(j){
+  joined(j,lk);useData(j.data);dclose();toast("Welcome back, "+j.name+"! Your map is on this device now.");});}
+ function share(t){var tt=t||(TN[cur]?cur:bt);
+  if(!CFG||(ME&&(!MR||MR.hasPin||ME.asked))){dlg("img",{t:tt});makeImg();return;}
+  if(!ME){dlg("name",{share:1,t:tt});return;}
+  ME.asked=1;setME(ME);dlg("pin",{t:tt,after:function(){D.v="img";makeImg();}});}
+ function makeImg(){var v=D,t=D.t;if(D.img){URL.revokeObjectURL(D.img.url);D.img=null;}D.busy=1;D.err="";ddraw();
+  var ch=ME&&CFG&&!D.synced?put({data:mapData()}).then(function(j){dirty(0);meIn(j);v.synced=1;}):Promise.resolve();
+  ch.then(function(){return t!=="ca"||window.am5geodata_canadaLow?0:new Promise(function(r){loadCA(r);});})
+   .then(function(){var r=ME&&MR?MR.ranks[t]:local(t);return card(t,ME?ME.name:"",r);})
+   .then(function(img){if(D!==v||D.t!==t){URL.revokeObjectURL(img.url);return;}D.img=img;})
+   .catch(function(e){if(D!==v)return;if(e&&e.status===401&&ME){dclose();lost();return;}D.err=e&&e.message||"Something went wrong.";})
+   .then(function(){if(D===v){D.busy=0;ddraw();}});}
+
+ /* ---- Board tab ---- */
  function draw(){if(cur!=="board")return;var c=$("lbc");c.innerHTML="";
-  if(msg)c.appendChild(el("div","ms",msg));
-  if(CFG===null){c.appendChild(el("p","mu","Loading the leaderboard…"));return;}
+  if(CFG===null){c.appendChild(el("p","mu","Loading…"));return;}
   if(CFG===false){c.appendChild(el("p","mu","The leaderboard isn't available here. It needs the Travel Globe server."));return;}
-  var cd=el("div","cd");c.appendChild(cd);
-  if(claim){cd.appendChild(el("h2","","Open your saved entry"));cd.appendChild(el("p","mu","Enter the PIN for this edit link to bring your entry and map to this device."));
-   var cp=pinIn();cd.appendChild(row(cp,E("button","pr","Open",function(){doClaim(cp.value);}),E("button","","Cancel",function(){claim=null;msg="";draw();})));
-   cd=el("div","cd");c.appendChild(cd);}
-  if(!ME){cd.appendChild(el("h2","","Join the leaderboard"));
-   cd.appendChild(el("p","mu","Your scores show up under a random name like “Teal Falcon 2390”. No account or email needed. You can change the name any time."));
-   cd.appendChild(row(E("button","pr","Join",join),E("button","","📤 Share",function(){share();})));}
-  else{cd.appendChild(el("h2","",ME.name));
-   cd.appendChild(el("p","mu","Globe "+rk("world")+" · US "+rk("us")+" · Canada "+rk("ca")));
-   cd.appendChild(row(E("button","pr","📤 Share",function(){share();}),E("button","","✎ Change name",rename),E("button","","🎲 Random name",reroll)));
-   if(MR&&!MR.hasPin){cd.appendChild(el("p","","Set a PIN to get your edit link. With the link and PIN you can open your entry and map on any device."));
-    var a=pinIn("PIN"),b=pinIn("Repeat");cd.appendChild(row(a,b,E("button","pr","Set PIN",function(){setPin(a.value,b.value);})));}
-   else if(MR&&ME.link){cd.appendChild(el("p","","Your edit link (keep it private):"));
-    var ln=el("input","ln");ln.readOnly=true;ln.value=link();ln.onclick=function(){ln.select();};
-    cd.appendChild(row(ln,E("button","","Copy",function(){var d=function(){msg="Link copied.";draw();};if(navigator.clipboard)navigator.clipboard.writeText(link()).then(d,function(){ln.select();});else{ln.select();document.execCommand("copy");d();}})));
-    cd.appendChild(el("p","mu","Save the link and remember your PIN. If you lose either one, the entry can't be recovered."));
-    if(form==="pin"){var o=pinIn("Old PIN"),n1=pinIn("New PIN"),n2=pinIn("Repeat");cd.appendChild(row(o,n1,n2,E("button","pr","Change PIN",function(){setPin(n1.value,n2.value,o.value);}),E("button","","Cancel",function(){form=null;draw();})));}
-    else if(form==="link"){var q=pinIn("PIN");cd.appendChild(el("p","mu","A new link stops the old one from working and signs out your other devices."));cd.appendChild(row(q,E("button","pr","Make new link",function(){relink(q.value);}),E("button","","Cancel",function(){form=null;draw();})));}
-    else cd.appendChild(row(E("button","","Change PIN",function(){form="pin";draw();}),E("button","","New edit link",function(){form="link";draw();})));}
-   else if(MR)cd.appendChild(el("p","mu","This device doesn't have the edit link. Use the device where you set the PIN."));
-   cd.appendChild(row(E("button","","Leave leaderboard",leave)));}
+  var y=el("div","you"),tx=el("div","tx");y.appendChild(tx);
+  if(ME){var r=MR&&MR.ranks[bt];tx.appendChild(el("b","",ME.name));tx.appendChild(el("small","",r&&r.rank?"#"+r.rank+" of "+r.total+" on "+TN[bt]:"Color places on the "+TN[bt]+" map to get ranked"));
+   y.appendChild(B("📤 Share","pr",function(){share(bt);}));var g=B("⚙️","ic",function(){dlg("me");});g.title="Your entry";g.setAttribute("aria-label","Your entry");y.appendChild(g);}
+  else{tx.appendChild(el("b","","See where you rank"));tx.appendChild(el("small","","No account or email needed."));y.appendChild(B("Join","pr",function(){dlg("name",{});}));}
+  c.appendChild(y);c.appendChild(seg(bt,function(t){bt=t;draw();}));
   if(!BD){c.appendChild(el("p","mu","Loading scores…"));return;}
-  ["world","us","ca"].forEach(function(t){var b=BD[t],d=el("div","cd"),h=el("h3","",NAMES[t]);h.appendChild(el("span","",b.total+(b.total===1?" traveler":" travelers")));d.appendChild(h);
-   if(!b.rows.length){d.appendChild(el("p","mu","No scores yet."));c.appendChild(d);return;}
-   var ol=el("ol"),rank=0,prev=null,mine=0;
-   b.rows.forEach(function(r,i){if(r.p!==prev){rank=i+1;prev=r.p;}var m=!!ME&&r.tag===ME.tag;if(m)mine=1;ol.appendChild(li(rank,r.name,r,m));});
-   var my=MR&&MR.ranks&&MR.ranks[t];
-   if(ME&&!mine&&my&&my.rank){ol.appendChild(el("li","gap","…"));ol.appendChild(li(my.rank,ME.name,{p:my.pts,n:my.n},1));}
-   d.appendChild(ol);c.appendChild(d);});
-  c.appendChild(el("p","mu","Scores show points · places visited. The board refreshes about once a minute."));}
+  var b=BD[bt],my=ME&&MR&&MR.ranks[bt],rows=b.rows,tot=b.total;
+  /* the board is cached for ~30 s, so put this player's fresh score into it */
+  if(my){rows=rows.filter(function(r){return r.tag!==ME.tag;});tot=my.total;
+   if(my.pts>0){var me={name:ME.name,tag:ME.tag,p:my.pts,n:my.n},at=0;while(at<rows.length&&(rows[at].p>me.p||rows[at].p===me.p&&rows[at].n>=me.n))at++;if(at<rows.length||rows.length<100)rows.splice(at,0,me);}}
+  if(!rows.length){c.appendChild(el("p","mu ctr","Nobody is on the "+TN[bt]+" board yet."));return;}
+  var ol=el("ol"),rank=0,prev=null,mine=0,li=function(k,nm,p,n,me){var x=el("li",me?"me":"");x.appendChild(el("span","","#"+k));x.appendChild(el("span","nm",nm));x.appendChild(el("span","sc",p+" pts · "+n));return x;};
+  rows.forEach(function(r,i){if(r.p!==prev){rank=i+1;prev=r.p;}var m=!!ME&&r.tag===ME.tag;if(m)mine=1;ol.appendChild(li(rank,r.name,r.p,r.n,m));});
+  if(ME&&!mine&&my&&my.rank){ol.appendChild(el("li","gap","⋯"));ol.appendChild(li(my.rank,ME.name,my.pts,my.n,1));}
+  c.appendChild(ol);c.appendChild(el("p","ft",tot+(tot===1?" traveler":" travelers")+" · points · places visited"));}
  function show(){draw();loadBoard();}
- /* ---- share: popup (board, name, optional PIN) -> joins/updates -> draws a PNG card ---- */
- var SH={t:"world",busy:0,err:"",img:null,pinNew:0},TN={world:"Globe",us:"US states",ca:"Canada"};
- function wait(ms){return new Promise(function(r){setTimeout(r,ms);});}
- function put(b){return call("PUT","/me",b,1).catch(function(e){if(e.status!==429)throw e;return wait(1200).then(function(){return call("PUT","/me",b,1);});});}
- function local(t){var p=0,n=0;IT[t].forEach(function(i){var v=S[t][i.k]||0;p+=v;if(v)n++;});if(!IT[t].length)for(var k in S[t]){p+=S[t][k];n++;}return{pts:p,n:n};}
- function site(){return location.origin+location.pathname;}
- function share(t){SH.t=t||(cur!=="board"?cur:"world");SH.err="";SH.img=null;SH.pinNew=0;sdraw();var d=$("shd");if(!d.open)d.showModal();}
- function sclose(){var d=$("shd");if(d.open)d.close();if(SH.img)URL.revokeObjectURL(SH.img.url);SH.img=null;}
- function sdraw(){var c=$("shc");c.innerHTML="";var B=function(x,cl,f){var b=el("button",cl,x);b.onclick=f;b.disabled=!!SH.busy;return b;};
-  if(SH.img){c.appendChild(el("h2","","Your image is ready"));var im=el("img");im.src=SH.img.url;im.alt="Travel Globe score card";c.appendChild(im);
-   var f=new File([SH.img.blob],"travel-globe-"+SH.t+".png",{type:"image/png"}),r=el("div","row");
-   if(navigator.canShare&&navigator.canShare({files:[f]}))r.appendChild(B("Share…","pr",function(){navigator.share({files:[f],text:SH.img.text+" "+site()}).catch(function(){});}));
-   r.appendChild(B("Download","",function(){var a=el("a");a.href=SH.img.url;a.download=f.name;document.body.appendChild(a);a.click();a.remove();}));
-   r.appendChild(B("Copy link","",function(){var done=function(){SH.err="Link copied.";sdraw();};if(navigator.clipboard)navigator.clipboard.writeText(site()).then(done,function(){});}));
-   r.appendChild(B("Done","",sclose));c.appendChild(r);
-   if(SH.pinNew)c.appendChild(el("p","mu","Your private edit link is on the 🏆 Board tab. Save it with your PIN."));
-   if(SH.err)c.appendChild(el("p","mu",SH.err));return;}
-  c.appendChild(el("h2","","Share your score"));
-  var seg=el("div","row");["world","us","ca"].forEach(function(t){seg.appendChild(B(TN[t]+" · "+local(t).pts,t===SH.t?"pr":"",function(){SH.t=t;sdraw();}));});c.appendChild(seg);
-  var nm=el("input","ln");nm.maxLength=24;nm.value=ME?ME.name:"";nm.placeholder="Leave empty for a random name";
-  if(CFG){c.appendChild(el("p","","Name on the leaderboard"));}else c.appendChild(el("p","","Name on the image"));
-  c.appendChild(row(nm));
-  var p1=null,p2=null;
-  if(CFG){if(MR&&MR.hasPin)c.appendChild(el("p","mu","✓ PIN is set."));
-   else{c.appendChild(el("p","","PIN (optional)"));p1=pinIn("PIN");p2=pinIn("Repeat");c.appendChild(row(p1,p2));
-    c.appendChild(el("p","mu","A PIN gives you a private edit link so you can open your map on other devices. Skip it and your entry can only be edited from this device."));}
-   if(!ME)c.appendChild(el("p","mu","Sharing adds you to the public leaderboard."));}
-  if(SH.err)c.appendChild(el("div","ms",SH.err));
-  c.appendChild(row(B(SH.busy?"Working…":"Create image","pr",function(){go(nm.value.trim(),p1?p1.value:"",p2?p2.value:"");}),B("Cancel","",sclose)));}
- function go(nm,a,b){if(SH.busy)return;
-  if(a||b){if(!/^\d{4,8}$/.test(a)){SH.err="PIN must be 4–8 digits, or leave both PIN boxes empty.";return sdraw();}if(a!==b){SH.err="The two PINs don't match.";return sdraw();}}
-  SH.busy=1;SH.err="";sdraw();var t=SH.t,ch;
-  if(!CFG)ch=Promise.resolve({name:nm||"A traveler",r:local(t)});
-  else{ch=ME?put({data:mapData(),name:nm&&nm!==ME.name?nm:undefined}).then(function(j){dirty(0);meIn(j);})
-   :human().then(function(ts){return call("POST","/join",{ts:ts,data:mapData(),name:nm||undefined});}).then(function(j){setME({id:j.id,dev:j.device,tag:j.tag,name:j.name});dirty(0);meIn(j);});
-   if(a)ch=ch.then(function(){return call("POST","/pin",{pin:a},1);}).then(function(j){ME.link=j.link;setME(ME);meIn(j);SH.pinNew=1;});
-   ch=ch.then(function(){BDt=0;loadBoard();draw();return{name:ME.name,r:MR.ranks[t]};});}
-  ch.then(function(o){return t!=="ca"||window.am5geodata_canadaLow?o:new Promise(function(r){loadCA(function(){r(o);});});}).then(function(o){return card(t,o.name,o.r);}).then(function(img){SH.img=img;})
-   .catch(function(e){if(e&&e.status===401&&ME)lost();SH.err=e&&e.message||"Something went wrong.";})
-   .then(function(){SH.busy=0;sdraw();});}
- /* 1080×1080 PNG: map of the colored places + name, points, rank and the site address */
+ /* rank badge next to the score on map tabs */
+ function chip(){var e=$("rkc");if(TN[cur])bt=cur;var r=ME&&MR&&MR.ranks&&MR.ranks[cur];if(r&&r.rank){e.textContent="🏆 #"+r.rank;e.title="Your rank on the "+TN[cur]+" leaderboard";e.style.display="";}else e.style.display="none";}
+
+ /* ---- card image (1080×1080): map of colored places, name, points, rank, site address ---- */
  function card(t,name,r){var W=1080,c=document.createElement("canvas");c.width=W;c.height=W;var x=c.getContext("2d");
   var F="system-ui,-apple-system,'Segoe UI',sans-serif",L=["#2a3442","#5b8def","#3fcf8e","#f7c948","#f58a42","#e5484d"];
   x.fillStyle="#0d1117";x.fillRect(0,0,W,W);
-  x.fillStyle="#8b98a9";x.font="600 34px "+F;x.textBaseline="alphabetic";x.fillText("TRAVEL GLOBE",60,90);
+  x.fillStyle="#8b98a9";x.font="600 34px "+F;x.fillText("TRAVEL GLOBE",60,90);
   x.textAlign="right";x.fillText(TN[t].toUpperCase(),W-60,90);x.textAlign="left";
   x.fillStyle="#0a2236";rr(x,40,120,W-80,540,28);x.fill();
   try{drawMap(x,t,60,140,W-120,500,L);}catch(e){}
-  x.fillStyle="#e6edf3";x.font="700 64px "+F;fitText(x,name,60,760,W-120);
-  x.font="800 150px "+F;x.fillText(String(r.pts),56,925);var pw=x.measureText(String(r.pts)).width;
+  if(name){x.fillStyle="#e6edf3";x.font="700 64px "+F;fitText(x,name,60,760,W-120);}
+  x.fillStyle="#e6edf3";x.font="800 150px "+F;x.fillText(String(r.pts),56,925);var pw=x.measureText(String(r.pts)).width;
   x.fillStyle="#8b98a9";x.font="600 50px "+F;x.fillText("pts",72+pw,925);
   x.textAlign="right";if(r.rank){x.fillStyle="#f7c948";x.font="800 90px "+F;x.fillText("#"+r.rank,W-60,900);x.fillStyle="#8b98a9";x.font="500 34px "+F;x.fillText("of "+r.total+" on the leaderboard",W-60,945);}
   x.textAlign="left";x.fillStyle="#8b98a9";x.font="500 38px "+F;x.fillText(r.n+(r.n===1?" place":" places")+" visited",60,990);
@@ -400,14 +429,19 @@ var LB=(function(){
   var p=d3.geo.path().projection(pr).context(x);x.lineWidth=1;x.strokeStyle="#0d1117";
   fs.forEach(function(f){x.beginPath();p(f);x.fillStyle=L[st[kf(f)]||0];x.fill();x.stroke();});
   if(t==="world")MKs.forEach(function(d){var v=st[d.k];if(!v)return;var q=pr([d.lon,d.lat]);if(!q)return;x.beginPath();x.arc(q[0],q[1],7,0,7);x.fillStyle=L[v];x.fill();x.strokeStyle="#e6edf3";x.lineWidth=2;x.stroke();});}
- /* ---- start: an edit link (#me=<id>.<secret>) opens the claim form on the Board tab ---- */
- var h=/^#me=([0-9a-f-]{36})\.([A-Za-z0-9_-]{20,})$/.exec(location.hash);
+
+ /* ---- start: an edit link (#me=<id>.<secret>) opens the PIN popup ---- */
+ $("shb").onclick=function(){share();};
+ $("dlx").onclick=dclose;
+ $("rkc").onclick=function(){cur="board";render();};
+ $("dlg").addEventListener("close",function(){if(D.img)URL.revokeObjectURL(D.img.url);D={};$("tsb").innerHTML="";});
+ var h=/^#me=([0-9a-f-]{36})\.([A-Za-z0-9_-]{20,})$/.exec(location.hash),cl=null;
  if(h){try{history.replaceState(null,"",location.pathname+location.search);}catch(e){}
-  if(!(ME&&ME.id===h[1]))claim={id:h[1],link:h[2]};else if(!ME.link){ME.link=h[2];setME(ME);}}
- call("GET","/config").then(function(j){CFG=j;},function(){CFG=false;}).then(function(){if(CFG&&ME)return pull();}).then(function(){if(cur==="board")show();});
- if(claim){cur="board";render();draw();}
- $("shb").onclick=function(){share();};$("shd").addEventListener("close",function(){if(SH.img){URL.revokeObjectURL(SH.img.url);SH.img=null;}});
- return{touch:touch,show:show,share:share};
+  if(!(ME&&ME.id===h[1]))cl={id:h[1],link:h[2]};else if(!ME.link){ME.link=h[2];setME(ME);}}
+ call("GET","/config").then(function(j){CFG=j;},function(){CFG=false;}).then(function(){
+  if(cl){if(CFG)dlg("claim",cl);else toast("This edit link can't be opened here.");}
+  if(CFG&&ME)return pull();}).then(function(){if(cur==="board")show();});
+ return{touch:touch,show:show,chip:chip};
 })();
 </script>
 </body></html>

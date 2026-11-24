@@ -71,6 +71,11 @@ DELETE FROM devices WHERE entry_id = '…'; DELETE FROM entries WHERE id = '…'
 - "New edit link" (needs the PIN) stops the old link from working and signs out all other devices.
 - Entry IDs are UUIDv7 and are never shown on the public board. Rows are matched to "you" with a short hash tag.
 
-## Sharing
+## How the leaderboard UI flows
 
-The 📤 Share button (on each map tab and on the Board) asks for a name and an optional PIN, joins or updates the leaderboard, then draws a 1080×1080 PNG in the browser: a map of your colored places, name, points, rank, and the site address. On phones it opens the system share sheet. On desktop it offers Download and Copy link. Edit links are never put in the image or share text.
+- **Map tabs:** a 📤 Share button next to the score. Once joined, a 🏆 #rank badge links to the board.
+- **Board tab:** a one-line "you" bar (Join, or your name + rank, Share and ⚙), a Globe / US states / Canada switcher that starts on the last map tab you used, and one list at a time.
+- **Share:** a first-time visitor picks a name, then gets a one-time offer to set a PIN (skippable), then the image. Later shares go straight to the image. The image is a 1080×1080 PNG drawn in the browser: a map of your colored places, name, points, rank and the site address. Phones get the system share sheet; desktops get Download and Copy link. Edit links are never put in the image or share text.
+- **⚙ Your entry:** name (or 🎲 random), set PIN / copy edit link / change PIN / replace link, and leave the leaderboard.
+- **Opening an edit link:** shows a "Welcome back" PIN popup over the map.
+- **Short messages** (joined, copied, signed out) appear as small notices that fade out.
