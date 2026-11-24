@@ -57,6 +57,9 @@ summary{cursor:pointer;margin-bottom:6px;font-weight:600}
 #lb li.gap{display:block;text-align:center;color:var(--mut);padding:2px}#lb .ft{color:var(--mut);font-size:12px;text-align:center;margin:12px 0 0}
 #dlg{border:1px solid var(--bd);border-radius:14px;background:var(--bg);color:var(--fg);padding:16px;width:min(420px,calc(100vw - 32px));max-height:calc(100dvh - 32px)}
 #dlg p.step{font-weight:600;font-size:15px;margin:12px 0 0}
+@keyframes shk{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-8px)}40%,60%{transform:translateX(8px)}}
+.ui .shake{animation:shk .45s both}.ui .shake input.pin,.ui .shake input.pin.act{border-color:var(--l5);outline-color:var(--l5)}
+@media (prefers-reduced-motion:reduce){.ui .shake{animation:none}}
 .ui .pad{display:grid;grid-template-columns:repeat(3,64px);gap:6px;margin:10px 0 0}.ui .pad button{padding:12px 0;font-size:20px;font-weight:600}.ui input.pin.act{outline:2px solid var(--l1);outline-offset:1px}
 #dlg #dlx{position:absolute;top:8px;right:8px;border:0;background:none;color:var(--mut);font-size:16px;padding:6px 9px}#dlg h2{padding-right:28px}#dlg::backdrop{background:rgba(0,0,0,.5)}#dlg h2{font-size:18px;margin:0 0 6px}#dlg p{margin:6px 0}#dlg img{width:100%;border-radius:10px;display:block}
 #dlg .ph{aspect-ratio:1;border-radius:10px;background:var(--l0);display:grid;place-items:center;color:var(--mut);font-size:14px}
@@ -327,7 +330,7 @@ var LB=(function(){
  function dclose(){var d=$("dlg");if(d.open)d.close();}
  function sub(s){D.sub=s;D.ps=null;D.err="";D.ok="";ddraw();}
  function run(p,ok){D.busy=1;D.err="";D.ok="";ddraw();var v=D;
-  return p.then(function(r){if(D!==v)return;D.busy=0;if(ok)ok(r);ddraw();},function(e){if(D!==v)return;D.busy=0;if(e&&e.status===401&&ME){dclose();lost();return;}D.ps=null;D.err=e&&e.message||"Something went wrong.";ddraw();});}
+  return p.then(function(r){if(D!==v)return;D.busy=0;if(ok)ok(r);ddraw();},function(e){if(D!==v)return;D.busy=0;if(e&&e.status===401&&ME){dclose();lost();return;}D.ps=null;D.shake=e&&(e.status===403||e.status===423);D.err=e&&e.message||"Something went wrong.";ddraw();});}
  function ddraw(){var c=$("dlc");c.innerHTML="";var v=D.v,dis=!!D.busy;if(!v)return;
   var H=function(t){c.appendChild(el("h2","",t));},P=function(t,cl){c.appendChild(el("p",cl||"",t));},L=function(t){c.appendChild(el("label","",t));},R=function(){c.appendChild(row.apply(null,arguments));};
   if(v==="claim"){H("Welcome back");P("Enter your PIN to bring your leaderboard entry and map to this device.","mu");
@@ -375,11 +378,12 @@ var LB=(function(){
    else R(B("Leave leaderboard","lk dz",function(){sub("leave");}));
    if(D.ok)c.appendChild(el("div","okm",D.ok));
    if(!D.sub)acts(c,B("Done","pr",dclose));}
-  if(D.err)c.appendChild(el("div","er",D.err));}
+  if(D.err)c.appendChild(el("div","er",D.err));
+  if(D.shake){D.shake=0;var pi=c.querySelector("input.pin");if(pi){pi.parentNode.classList.add("shake");try{navigator.vibrate&&navigator.vibrate([70,50,70]);}catch(e){}}}}
 
  /* ---- actions ---- */
  function suggest(force){if(D.sugg&&!force)return;D.sugg=1;var v=D;call("GET","/suggest").then(function(j){if(D===v&&D.v==="name"){D.nm=j.name;ddraw();}},function(){if(D===v&&D.nm==null){D.nm="";ddraw();}});}
- function pinOk(a,b){if(!/^\d{4,8}$/.test(a)){D.err="PIN must be 4–8 digits.";ddraw();return false;}if(a!==b){D.ps=null;D.err="Those PINs didn't match. Please choose your PIN again.";ddraw();return false;}return true;}
+ function pinOk(a,b){if(!/^\d{4,8}$/.test(a)){D.err="PIN must be 4–8 digits.";ddraw();return false;}if(a!==b){D.ps=null;D.shake=1;D.err="Those PINs didn't match. Please choose your PIN again.";ddraw();return false;}return true;}
  function joined(j,link){setME({id:j.id,dev:j.device,tag:j.tag,name:j.name,link:link});dirty(0);meIn(j);BDt=0;loadBoard();draw();}
  function nameGo(nm){D.nm=nm;run(human().then(function(ts){return call("POST","/join",{ts:ts,data:mapData(),name:nm||undefined});}),function(j){joined(j);
   if(!D.share){dclose();toast("You're on the leaderboard as "+j.name+".");return;}
