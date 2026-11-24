@@ -26,9 +26,12 @@ r = await api("POST", "/api/join", { name: "Shneor S.", data: { world: { FR: 1 }
 ok(r.s === 200 && r.j.name === "Shneor S." && r.j.ranks.world.rank === 2 && r.j.ranks.world.total === 2, "join with name, rank 2", r.j);
 const devB = r.j.device;
 // validation
-for (const [n, why] of [["Teal Falcon 2390", "random pattern"], ["x", "too short"], ["F.u.c.k you", "bad word"], ["<script>", "chars"], ["a".repeat(25), "too long"]]) {
+for (const [n, why] of [["John Smith 1985", "random pattern"], ["x", "too short"], ["F.u.c.k you", "bad word"], ["<script>", "chars"], ["a".repeat(25), "too long"]]) {
   await sleep(1050); r = await api("PUT", "/api/me", { name: n }, devB); ok(r.s === 400, "reject name: " + why, r);
 }
+await sleep(1050); r = await api("PUT", "/api/me", { name: "Teal Falcon 2390" }, devB); ok(r.s === 200, "allow real random-style name", r);
+r = await api("GET", "/api/suggest"); ok(r.s === 200 && /^\w+ \w+ \d{4}$/.test(r.j.name), "suggest a name", r);
+r = await api("POST", "/api/join", { name: r.j.name }); ok(r.s === 200, "join with suggested name", r);
 await sleep(1050); r = await api("PUT", "/api/me", { name: "Peacock Nazir" }, devB); ok(r.s === 200, "allow Peacock Nazir", r);
 r = await api("POST", "/api/join", { name: "shit head" }); ok(r.s === 400, "join rejects bad name", r);
 r = await api("PUT", "/api/me", { data: { world: { DE: 9 } } }, devA); ok(r.s === 400, "reject level 9", r);

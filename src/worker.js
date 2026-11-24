@@ -51,6 +51,7 @@ async function route(req, env, ctx, url) {
   const p = url.pathname, m = req.method;
   if (p === "/api/config" && m === "GET") return config(env);
   if (p === "/api/board" && m === "GET") return board(req, env, ctx, url);
+  if (p === "/api/suggest" && m === "GET") return json({ name: randomName() });
   if (p === "/api/join" && m === "POST") return join(req, env);
   if (p === "/api/claim" && m === "POST") return claim(req, env);
   if (p === "/api/me") {
@@ -274,7 +275,9 @@ function cleanName(s) {
   if ([...n].length < 2 || [...n].length > 24) throw new HttpError(400, "Name must be 2–24 characters.");
   if (!/^[\p{L}\p{N}][\p{L}\p{M}\p{N} .'_-]*$/u.test(n) || /\p{M}{3,}/u.test(n))
     throw new HttpError(400, "Use letters, numbers, spaces and . - _ ' only.");
-  if (/^\p{Lu}\p{Ll}+ \p{Lu}\p{Ll}+ \d{4}$/u.test(n))
+  // "Word Word 1234" is reserved for real random names (from /api/suggest or the 🎲 button).
+  const auto = /^(\p{Lu}\p{Ll}+) (\p{Lu}\p{Ll}+) \d{4}$/u.exec(n);
+  if (auto && !(ADJ.includes(auto[1]) && ANI.includes(auto[2])))
     throw new HttpError(400, "That looks like an auto-generated name. Pick something else, or use the random name button.");
   const flat = n.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/[013457]/g, (c) => LEET[c]).replace(/[^a-z]/g, "");
   if (BAD.some((w) => flat.includes(w))) throw new HttpError(400, "Please choose a different name.");
