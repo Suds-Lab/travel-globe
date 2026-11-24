@@ -1,0 +1,23 @@
+{
+  // Cloudflare Worker that serves the site (public/) and the leaderboard API (src/worker.js).
+  // See SETUP.md for the one-time setup steps.
+  "name": "travel-globe",
+  "main": "src/worker.js",
+  "compatibility_date": "2025-09-01",
+  "assets": { "directory": "./public", "binding": "ASSETS" },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "travel-globe",
+      // Paste the id printed by `npx wrangler d1 create travel-globe`.
+      "database_id": "REPLACE_WITH_D1_DATABASE_ID"
+    }
+  ],
+  // Your subdomain. Must be on a domain that's in this Cloudflare account.
+  "routes": [{ "pattern": "travel-globe.example.com", "custom_domain": true }],
+  "vars": {
+    // Turnstile *site* key (public). The secret key is stored with `npx wrangler secret put TURNSTILE_SECRET`.
+    "TURNSTILE_SITE_KEY": "REPLACE_WITH_TURNSTILE_SITE_KEY"
+  },
+  "observability": { "enabled": true }
+}
