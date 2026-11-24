@@ -56,6 +56,7 @@ summary{cursor:pointer;margin-bottom:6px;font-weight:600}
 #lb li.me{background:var(--l2);color:#222;border-radius:8px;font-weight:600;border-top-color:transparent}#lb li.me .sc{color:#222}#lb li.me+li{border-top-color:transparent}
 #lb li.gap{display:block;text-align:center;color:var(--mut);padding:2px}#lb .ft{color:var(--mut);font-size:12px;text-align:center;margin:12px 0 0}
 #dlg{border:1px solid var(--bd);border-radius:14px;background:var(--bg);color:var(--fg);padding:16px;width:min(420px,calc(100vw - 32px));max-height:calc(100dvh - 32px)}
+#dlg p.step{font-weight:600;font-size:15px;margin:12px 0 0}
 .ui .pad{display:grid;grid-template-columns:repeat(3,64px);gap:6px;margin:10px 0 0}.ui .pad button{padding:12px 0;font-size:20px;font-weight:600}.ui input.pin.act{outline:2px solid var(--l1);outline-offset:1px}
 #dlg #dlx{position:absolute;top:8px;right:8px;border:0;background:none;color:var(--mut);font-size:16px;padding:6px 9px}#dlg h2{padding-right:28px}#dlg::backdrop{background:rgba(0,0,0,.5)}#dlg h2{font-size:18px;margin:0 0 6px}#dlg p{margin:6px 0}#dlg img{width:100%;border-radius:10px;display:block}
 #dlg .ph{aspect-ratio:1;border-radius:10px;background:var(--l0);display:grid;place-items:center;color:var(--mut);font-size:14px}
@@ -312,15 +313,21 @@ var LB=(function(){
    b.onclick=function(){var i=ins[act];if(k==="⌫")i.value=i.value.slice(0,-1);else if(k==="↵"){if(act<ins.length-1){act++;mark();if(!coarse)ins[act].focus();}else submit();}else if(i.value.length<8)i.value+=k;};
    g.appendChild(b);});
   mark();return g;}
+ /* asks for PINs one box at a time (e.g. choose -> confirm); Enter/↵/Next moves on, the last step calls done(values) */
+ function pinSteps(c,labels,done,dis){var st=D.ps||(D.ps={k:0,v:[]}),k=st.k;
+  c.appendChild(el("p","step",labels[k]));var i=pinIn("PIN");i.setAttribute("aria-label",labels[k]);c.appendChild(row(i));
+  var nx=function(){var v=i.value;if(!/^\d{4,8}$/.test(v)){D.err="PIN must be 4–8 digits.";ddraw();return;}st.v[k]=v;if(k<labels.length-1){st.k++;D.err="";ddraw();}else done(st.v);};
+  enter(i,nx);c.appendChild(pad([i],nx,dis));pfocus(i);return nx;}
+ function back(){return D.ps&&D.ps.k>0&&!D.busy?B("← Back","lk",function(){D.ps.k--;D.err="";ddraw();}):el("span");}
  function pfocus(i){if(!coarse)setTimeout(function(){i.focus();},0);}
  function seg(sel,f,dis){var s=el("div","seg");["world","us","ca"].forEach(function(t){s.appendChild(B(TN[t],t===sel?"on":"",function(){if(t!==sel)f(t);},dis));});return s;}
 
  /* ---- popup (one <dialog>, several views) ---- */
  function dlg(v,o){D=o||{};D.v=v;D.err="";D.ok="";D.busy=0;ddraw();var d=$("dlg");if(!d.open)d.showModal();}
  function dclose(){var d=$("dlg");if(d.open)d.close();}
- function sub(s){D.sub=s;D.err="";D.ok="";ddraw();}
+ function sub(s){D.sub=s;D.ps=null;D.err="";D.ok="";ddraw();}
  function run(p,ok){D.busy=1;D.err="";D.ok="";ddraw();var v=D;
-  return p.then(function(r){if(D!==v)return;D.busy=0;if(ok)ok(r);ddraw();},function(e){if(D!==v)return;D.busy=0;if(e&&e.status===401&&ME){dclose();lost();return;}D.err=e&&e.message||"Something went wrong.";ddraw();});}
+  return p.then(function(r){if(D!==v)return;D.busy=0;if(ok)ok(r);ddraw();},function(e){if(D!==v)return;D.busy=0;if(e&&e.status===401&&ME){dclose();lost();return;}D.ps=null;D.err=e&&e.message||"Something went wrong.";ddraw();});}
  function ddraw(){var c=$("dlc");c.innerHTML="";var v=D.v,dis=!!D.busy;if(!v)return;
   var H=function(t){c.appendChild(el("h2","",t));},P=function(t,cl){c.appendChild(el("p",cl||"",t));},L=function(t){c.appendChild(el("label","",t));},R=function(){c.appendChild(row.apply(null,arguments));};
   if(v==="claim"){H("Welcome back");P("Enter your PIN to bring your leaderboard entry and map to this device.","mu");
@@ -338,8 +345,8 @@ var LB=(function(){
    if(D.nm==null)suggest();else if(!dis)setTimeout(function(){n.focus();n.select();},0);}
   else if(v==="pin"){H("Want it on your other devices?");
    P("Set a PIN and you'll get a private edit link. Open it on another device, enter the PIN, and your map comes along.","mu");
-   var a=pinIn("PIN"),b=pinIn("Repeat PIN");R(a,b);var sp=function(){pinGo(a.value,b.value);};enter(b,sp);c.appendChild(pad([a,b],sp,dis));
-   acts(c,B("Skip","",function(){D.after();},dis),B(dis?"Saving…":"Set PIN","pr",sp,dis));pfocus(a);}
+   var sp=pinSteps(c,["Choose a PIN (4–8 digits)","Enter it again to confirm"],function(v){pinGo(v[0],v[1]);},dis);
+   acts(c,back(),B("Skip","",function(){D.after();},dis),B(dis?"Saving…":D.ps.k===1?"Set PIN":"Next","pr",sp,dis));}
   else if(v==="img"){H("Share your score");c.appendChild(seg(D.t,function(t){D.t=t;makeImg();},dis));
    if(D.img){var im=el("img");im.src=D.img.url;im.alt="Travel Globe score card";c.appendChild(im);
     var f=new File([D.img.blob],"travel-globe-"+D.t+".png",{type:"image/png"}),sh=navigator.canShare&&navigator.canShare({files:[f]}),bs=[];
@@ -356,11 +363,11 @@ var LB=(function(){
    L("Other devices");
    if(!MR||!MR.hasPin){
     if(D.sub!=="setpin"){P("Set a PIN to get a private edit link, so you can open your map on another device.","mu");R(B("Set a PIN","",function(){sub("setpin");}));}
-    else{var a2=pinIn("PIN"),b2=pinIn("Repeat PIN"),s2=function(){pinGo(a2.value,b2.value);};R(a2,b2);c.appendChild(pad([a2,b2],s2,dis));acts(c,B("Cancel","",function(){sub(null);}),B(dis?"Saving…":"Save PIN","pr",s2,dis));pfocus(a2);}}
+    else{var s2=pinSteps(c,["Choose a PIN (4–8 digits)","Enter it again to confirm"],function(v){pinGo(v[0],v[1]);},dis);acts(c,back(),B("Cancel","",function(){sub(null);}),B(dis?"Saving…":D.ps.k===1?"Save PIN":"Next","pr",s2,dis));}}
    else if(!ME.link)P("Your edit link is on the device where you set the PIN.","mu");
    else{R(B("Copy edit link","",function(){copy(link(),"Edit link copied. Keep it private.");}));
     P("Open it on another device and enter your PIN. Lose the link or forget the PIN and the entry can't be recovered.","mu sm");
-    if(D.sub==="chpin"){var o=pinIn("Current PIN"),n3=pinIn("New PIN"),n4=pinIn("Repeat"),s3=function(){chPin(o.value,n3.value,n4.value);};R(o,n3,n4);c.appendChild(pad([o,n3,n4],s3,dis));acts(c,B("Cancel","",function(){sub(null);}),B("Change PIN","pr",s3,dis));pfocus(o);}
+    if(D.sub==="chpin"){var s3=pinSteps(c,["Enter your current PIN","Choose a new PIN (4–8 digits)","Enter the new PIN again to confirm"],function(v){chPin(v[0],v[1],v[2]);},dis);acts(c,back(),B("Cancel","",function(){sub(null);}),B(dis?"Saving…":D.ps.k===2?"Change PIN":"Next","pr",s3,dis));}
     else if(D.sub==="relink"){P("The new link replaces the old one and signs out your other devices.","mu sm");var q=pinIn("PIN"),s4=function(){relink(q.value);};R(q);c.appendChild(pad([q],s4,dis));acts(c,B("Cancel","",function(){sub(null);}),B("Make new link","pr",s4,dis));pfocus(q);}
     else R(B("Change PIN","lk",function(){sub("chpin");}),B("Replace link","lk",function(){sub("relink");}));}
    c.appendChild(el("hr"));
@@ -372,7 +379,7 @@ var LB=(function(){
 
  /* ---- actions ---- */
  function suggest(force){if(D.sugg&&!force)return;D.sugg=1;var v=D;call("GET","/suggest").then(function(j){if(D===v&&D.v==="name"){D.nm=j.name;ddraw();}},function(){if(D===v&&D.nm==null){D.nm="";ddraw();}});}
- function pinOk(a,b){if(!/^\d{4,8}$/.test(a)){D.err="PIN must be 4–8 digits.";ddraw();return false;}if(a!==b){D.err="The two PINs don't match.";ddraw();return false;}return true;}
+ function pinOk(a,b){if(!/^\d{4,8}$/.test(a)){D.err="PIN must be 4–8 digits.";ddraw();return false;}if(a!==b){D.ps=null;D.err="Those PINs didn't match. Please choose your PIN again.";ddraw();return false;}return true;}
  function joined(j,link){setME({id:j.id,dev:j.device,tag:j.tag,name:j.name,link:link});dirty(0);meIn(j);BDt=0;loadBoard();draw();}
  function nameGo(nm){D.nm=nm;run(human().then(function(ts){return call("POST","/join",{ts:ts,data:mapData(),name:nm||undefined});}),function(j){joined(j);
   if(!D.share){dclose();toast("You're on the leaderboard as "+j.name+".");return;}
