@@ -89,6 +89,7 @@ summary::after{content:"›";color:var(--mut);font-size:20px;transform:rotate(90
 #dlg::backdrop{background:rgba(0,0,0,.6);backdrop-filter:blur(2px)}
 #dlg #dlx{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;padding:0;background:var(--fill);color:var(--mut);font-size:13px;font-weight:800}
 #dlg h2{font-size:22px;font-weight:800;letter-spacing:-.01em;margin:0 0 6px;padding-right:36px}#dlg p{margin:6px 0}
+#dlg .steps{display:inline-block;margin:2px 0 4px;padding:3px 9px;border-radius:999px;background:var(--accT);color:var(--acc);font-size:12px;font-weight:700}
 #dlg p.step{font-weight:700;font-size:15px;margin:14px 0 0}
 #dlg img{display:block;max-width:100%;height:min(56vh,620px);width:auto;margin:4px auto 0;border-radius:14px}
 #dlg .ph{height:min(56vh,620px);aspect-ratio:9/16;margin:4px auto 0;border-radius:14px;background:var(--fill);display:grid;place-items:center;color:var(--mut);font-size:14px}
@@ -172,7 +173,7 @@ body{padding-top:calc(env(safe-area-inset-top,0px) + 76px);padding-bottom:calc(e
 var LV=["Never been here","Passed here","Visited here","Stayed here","Extensively visited","Lived here"],DS=["","Drove through, stopped for gas etc., or airport connection","Visited and actually did something significant, but didn't stay overnight","Stayed for at least 1 night","Stayed for at least 15 nights (can be over multiple trips)","Stayed for at least 30 consecutive nights"],TER=[["PR","Puerto Rico","Puerto Rico"],["VI","U.S. Virgin Islands","US Virgin Is."],["GU","Guam","Guam"],["AS","American Samoa","Am. Samoa"],["MP","Northern Mariana Islands","N. Mariana Is."]],CS=0;//"","Transported through: car, train, a layover, or a gas stop","Stopped at a specific attraction","Roughly 18 to 72 hours","72 hours or more","Paid at least a month’s rent"],CS=0;
 var MK="VAT,Vatican City,41.9,12.45;MCO,Monaco,43.73,7.42;SMR,San Marino,43.94,12.46;LIE,Liechtenstein,47.14,9.55;AND,Andorra,42.55,1.6;MLT,Malta,35.9,14.4;LUX,Luxembourg,49.8,6.1;SGP,Singapore,1.35,103.82;BHR,Bahrain,26.07,50.55;MDV,Maldives,3.2,73.2;SYC,Seychelles,-4.68,55.49;MUS,Mauritius,-20.3,57.55;COM,Comoros,-11.65,43.35;STP,São Tomé and Príncipe,0.25,6.6;CPV,Cabo Verde,16,-24;BRB,Barbados,13.19,-59.54;LCA,Saint Lucia,13.9,-60.97;VCT,Saint Vincent and the Grenadines,13.25,-61.2;GRD,Grenada,12.12,-61.68;ATG,Antigua and Barbuda,17.06,-61.8;KNA,Saint Kitts and Nevis,17.36,-62.78;DMA,Dominica,15.42,-61.35;PLW,Palau,7.5,134.6;MHL,Marshall Islands,7.1,171.2;FSM,Micronesia,6.9,158.2;NRU,Nauru,-0.53,166.93;KIR,Kiribati,1.87,-157.4;TUV,Tuvalu,-8.52,179.2;TON,Tonga,-21.18,-175.2;WSM,Samoa,-13.76,-172.1;BRN,Brunei,4.5,114.7;TLS,Timor-Leste,-8.87,125.73;SWZ,Eswatini,-26.5,31.5;HKG,Hong Kong,22.32,114.17;MAC,Macao,22.2,113.55";
 var CA="Alberta,British Columbia,Manitoba,New Brunswick,Newfoundland and Labrador,Northwest Territories,Nova Scotia,Nunavut,Ontario,Prince Edward Island,Quebec,Saskatchewan,Yukon".split(",");
-var TI={world:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3C9.5 5.7 8.2 8.7 8.2 12s1.3 6.3 3.8 9"/>',us:'<rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M10.5 5v6.5H2.5M10.5 8.25h11M10.5 11.5h11M2.5 14.75h19"/><g fill="currentColor" stroke="none"><circle cx="5.1" cy="7.4" r=".65"/><circle cx="7.9" cy="7.4" r=".65"/><circle cx="6.5" cy="9.3" r=".65"/></g>',ca:'<rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M7.2 5v14M16.8 5v14"/><path fill="currentColor" stroke="none" d="M12.00 8.82 12.59 10.00 13.41 9.63 13.11 11.48 14.22 10.74 14.00 11.70 15.11 11.93 14.00 12.96 14.22 13.63 12.26 13.33 12.26 15.18 11.74 15.18 11.74 13.33 9.78 13.63 10.00 12.96 8.89 11.93 10.00 11.70 9.78 10.74 10.89 11.48 10.59 9.63 11.41 10.00 12.00 8.82Z"/>',board:'<path d="M3 20h18M5 20v-7h4v7M10 20V5h4v15M15 20v-10h4v10"/>'};
+var TI={world:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3C9.5 5.7 8.2 8.7 8.2 12s1.3 6.3 3.8 9"/>',us:'<rect x="2.5" y="5" width="19" height="14" rx="4"/><path d="M10.5 5v6.5H2.5M10.5 8.25h11M10.5 11.5h11M2.5 14.75h19"/><g fill="currentColor" stroke="none"><circle cx="5.1" cy="7.4" r=".65"/><circle cx="7.9" cy="7.4" r=".65"/><circle cx="6.5" cy="9.3" r=".65"/></g>',ca:'<rect x="2.5" y="5" width="19" height="14" rx="4"/><path d="M7.2 5v14M16.8 5v14"/><path fill="currentColor" stroke="none" d="M12.00 8.82 12.59 10.00 13.41 9.63 13.11 11.48 14.22 10.74 14.00 11.70 15.11 11.93 14.00 12.96 14.22 13.63 12.26 13.33 12.26 15.18 11.74 15.18 11.74 13.33 9.78 13.63 10.00 12.96 8.89 11.93 10.00 11.70 9.78 10.74 10.89 11.48 10.59 9.63 11.41 10.00 12.00 8.82Z"/>',board:'<path d="M3 20h18M5 20v-7h4v7M10 20V5h4v15M15 20v-10h4v10"/>'};
 var TABS=[["world","Globe"],["us","US states"],["ca","Canada"],["board","Leaderboard"]];
 var S={world:{},us:{},ca:{}},SEL={},IT={world:[],us:[],ca:[]},NM={world:{},us:{},ca:{}},LL={},FL={},FT={us:[0,0,1],ca:[0,0,1]};
 var cur="world",r=[-10,-25],K=1,R=180;
@@ -424,15 +425,15 @@ var LB=(function(){
    var p=pinIn(),cg=function(){claimGo(p.value);},bx=el("div","pinbox");bx.appendChild(p);enter(p,cg);bx.appendChild(pad([p],cg,dis));c.appendChild(bx);
    acts(c,B("Cancel","",dclose),B(dis?"Opening…":"Open","pr",cg,dis));pfocus(p);}
   else if(v==="name"){H(D.share?"Share your score":"Join the leaderboard");
-   P(D.share?"First, pick the name shown next to your score on the public leaderboard.":"Pick the name shown next to your score. No account or email needed.","mu");
+   P(D.share?"First, pick the name shown next to your score on the public leaderboard.":"Pick the name shown next to your score. No account or email needed.","mu");c.appendChild(el("div","steps",D.share?"Step 1 of 3 · Name → PIN → Passport":"Step 1 of 2 · Name → PIN"));
    var n=el("input","wide");n.maxLength=24;n.placeholder=D.nm==null?"Picking a name…":"Your name";n.autocomplete="off";n.value=D.nm||"";n.setAttribute("aria-label","Your name");
    n.oninput=function(){D.nm=n.value;};
    var dice=ico(B("","ic",function(){suggest(1);},dis),"dice");dice.title="Another random name";dice.setAttribute("aria-label","Another random name");R(n,dice);
    P("We picked a random name for you. Keep it, roll a new one, or type your own. You can change it any time.","mu sm");
    var nx=function(){nameGo(n.value.trim());};enter(n,nx);
-   acts(c,B("Cancel","",dclose),B(dis?"Joining…":D.share?"Next":"Join","pr",nx,dis||D.nm==null));
+   acts(c,B("Cancel","",dclose),B(dis?"Joining…":"Next","pr",nx,dis||D.nm==null));
    if(D.nm==null)suggest();else if(!dis)setTimeout(function(){n.focus();n.select();},0);}
-  else if(v==="pin"){H("Want it on your other devices?");
+  else if(v==="pin"){H("Want it on your other devices?");if(D.fromName)c.appendChild(el("div","steps",D.share?"Step 2 of 3 · optional":"Step 2 of 2 · optional"));
    P("Set a PIN and you'll get a private edit link. Open it on another device, enter the PIN, and your map comes along.","mu");
    var sp=pinSteps(c,["Choose a PIN (4–8 digits)","Enter it again to confirm"],function(v){pinGo(v[0],v[1]);},dis);
    acts(c,back(),B("Skip","",function(){D.after();},dis),B(dis?"Saving…":D.ps.k===1?"Set PIN":"Next","pr",sp,dis));}
@@ -472,8 +473,8 @@ var LB=(function(){
  function pinOk(a,b){if(!/^\d{4,8}$/.test(a)){D.err="PIN must be 4–8 digits.";ddraw();return false;}if(a!==b){D.ps=null;D.shake=1;D.err="Those PINs didn't match. Please choose your PIN again.";ddraw();return false;}return true;}
  function joined(j,link){setME({id:j.id,dev:j.device,tag:j.tag,name:j.name,link:link});dirty(0);meIn(j);BDt=0;loadBoard();draw();}
  function nameGo(nm){D.nm=nm;run(human().then(function(ts){return call("POST","/join",{ts:ts,data:mapData(),name:nm||undefined});}),function(j){joined(j);
-  if(!D.share){dclose();toast("You're on the leaderboard as "+j.name+".");return;}
-  ME.asked=1;setME(ME);D.v="pin";D.after=function(){D.v="img";makeImg();};});}
+  ME.asked=1;setME(ME);D.v="pin";D.fromName=1;
+  D.after=D.share?function(){D.v="img";makeImg();}:function(){var pn=D.pinNew;dclose();toast(pn?"You're in! Your edit link is under ⚙ Your entry.":"You're on the leaderboard as "+j.name+".");};});}
  function pinGo(a,b){if(!pinOk(a,b))return;run(call("POST","/pin",{pin:a},1),function(j){ME.link=j.link;ME.asked=1;setME(ME);meIn(j);
   if(D.v==="pin"){D.pinNew=1;D.after();}else{D.sub=null;D.ok="PIN set. Use “Copy edit link” and keep the link somewhere safe.";}});}
  function chPin(o,a,b){if(!pinOk(a,b))return;run(call("POST","/pin",{pin:a,link:ME.link,oldPin:o},1),function(j){meIn(j);D.sub=null;D.ok="PIN changed.";});}

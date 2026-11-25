@@ -9,15 +9,15 @@
     {
       "binding": "DB",
       "database_name": "travel-globe",
-      // Paste the id printed by `npx wrangler d1 create travel-globe`.
-      "database_id": "REPLACE_WITH_D1_DATABASE_ID"
+      // D1 database ID (dashboard: Storage & Databases → D1 → travel-globe). Not a secret.
+      "database_id": "cbb4f712-22d1-41a3-8028-0333367ff239"
     }
   ],
   // Your subdomain. Must be on a domain that's in this Cloudflare account.
-  "routes": [{ "pattern": "travel-globe.example.com", "custom_domain": true }],
+  "routes": [{ "pattern": "travel-globe.shneor.dev", "custom_domain": true }],
   "vars": {
-    // Turnstile *site* key (public). The secret key is stored with `npx wrangler secret put TURNSTILE_SECRET`.
-    "TURNSTILE_SITE_KEY": "REPLACE_WITH_TURNSTILE_SITE_KEY"
+    // Turnstile *site* key (public). The SECRET key goes only in the dashboard: Worker → Settings → Variables and Secrets → TURNSTILE_SECRET.
+    "TURNSTILE_SITE_KEY": "0x4AAAAAAGSn2j8XEoWoMaqr"
   },
   "observability": { "enabled": true }
 }
