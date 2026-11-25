@@ -7,7 +7,9 @@ const q = async (b) => { const r = await fetch(D, { method: "POST", body: JSON.s
 const stmt = (sql, params = []) => ({ sql, params, bind: (...a) => stmt(sql, a), first: async () => (await q({ sql, params })).results[0] ?? null, all: () => q({ sql, params }), run: () => q({ sql, params }) });
 globalThis.caches = { default: { match: async () => undefined, put: async () => {} } };
 const { default: W } = await import(workerPath);
-const env = { DB: { prepare: (s) => stmt(s), batch: (ss) => q({ batch: ss.map((s) => ({ sql: s.sql, params: s.params })) }) }, ALLOW_NO_TURNSTILE: "1" };
+const env = { DB: { prepare: (s) => stmt(s), batch: (ss) => q({ batch: ss.map((s) => ({ sql: s.sql, params: s.params })) }) }, ALLOW_NO_TURNSTILE: "1",
+  /* optional: TURNSTILE_SITE_KEY=1x00000000000000000000AA TURNSTILE_SECRET=1x0000000000000000000000000000000AA (Cloudflare test keys, always pass) */
+  ...(process.env.TURNSTILE_SITE_KEY && { TURNSTILE_SITE_KEY: process.env.TURNSTILE_SITE_KEY, TURNSTILE_SECRET: process.env.TURNSTILE_SECRET }) };
 const T = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".png": "image/png" };
 http.createServer(async (req, res) => {
   const u = new URL(req.url, "http://localhost:" + port);

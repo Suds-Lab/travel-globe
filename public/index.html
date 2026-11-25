@@ -371,12 +371,30 @@ var LB=(function(){
  function copy(s,m){var ok=function(){toast(m);},bad=function(){var a=el("textarea");a.value=s;($("dlg").open?$("dlg"):document.body).appendChild(a);a.select();try{document.execCommand("copy");ok();}catch(e){prompt("Copy this:",s);}a.remove();};
   if(navigator.clipboard)navigator.clipboard.writeText(s).then(ok,bad);else bad();}
  function lost(){setME(null);MR=null;dirty(0);chip();draw();toast("This device was signed out of the leaderboard. Your map is still here.");}
- function human(){return new Promise(function(res,rej){if(!CFG||!CFG.ts)return res("");
-  function go(){var box=$("tsb");box.innerHTML="";var w=turnstile.render(box,{sitekey:CFG.ts,appearance:"interaction-only",
-   callback:function(t){res(t);setTimeout(function(){try{turnstile.remove(w);}catch(e){}},0);},
-   "error-callback":function(){rej(new Error("The verification check failed. Please try again."));}});}
-  if(window.turnstile)return go();var s=document.createElement("script");s.src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
-  s.onload=go;s.onerror=function(){rej(new Error("Could not load the verification check."));};document.head.appendChild(s);});}
+ /* Turnstile bot check. tsStart() runs it in the background as soon as a Join/claim dialog opens, so the token is
+    usually ready before the button is pressed. human() waits for that token (single use) and then removes the widget. */
+ var TS=null;
+ function tsStop(){if(TS&&TS.w!=null){try{turnstile.remove(TS.w);}catch(e){}}TS=null;$("tsb").innerHTML="";}
+ function tsStart(){if(!CFG||!CFG.ts||TS)return;var s=TS={w:null,tok:null,err:null,wait:[]},
+   kick=function(){s.wait.slice().forEach(function(f){f();});},
+   fail=function(m){if(TS===s){s.err=new Error(m);kick();}};
+  function go(){if(TS!==s)return;s.w=turnstile.render($("tsb"),{sitekey:CFG.ts,appearance:"interaction-only",
+   callback:function(t){s.tok=t;kick();},
+   "expired-callback":function(){s.tok=null;},
+   "before-interactive-callback":function(){if(s.wait.length)toast("Quick check: tap the box at the bottom.");},
+   "error-callback":function(c){fail("The verification check failed ("+c+"). Please try again.");return true;},
+   "unsupported-callback":function(){fail("This browser can't run the verification check.");}});}
+  if(window.turnstile)return go();
+  var sc=document.querySelector("script[data-ts]");
+  if(!sc){sc=document.createElement("script");sc.src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";sc.setAttribute("data-ts","");document.head.appendChild(sc);}
+  sc.addEventListener("load",go);sc.addEventListener("error",function(){fail("Could not load the verification check.");});}
+ function human(){if(!CFG||!CFG.ts)return Promise.resolve("");tsStart();var s=TS;
+  return new Promise(function(res,rej){var to,done=function(){if(TS!==s)return;
+    if(s.tok){var t=s.tok;clearTimeout(to);tsStop();res(t);}else if(s.err){var e=s.err;clearTimeout(to);tsStop();rej(e);}};
+   s.wait.push(done);
+   if(!s.tok&&!s.err&&s.w!=null)setTimeout(function(){if(TS===s&&!s.tok)toast("Checking you're not a bot…");},1500);
+   to=setTimeout(function(){if(TS===s){tsStop();rej(new Error("The verification check took too long. Please try again."));}},60000);
+   done();});}
 
  /* ---- sync: edits go up 2.5 s after the last change; on load the server copy wins unless this device has unsent edits ---- */
  function touch(){if(!ME)return;dirty(1);sv++;clearTimeout(sT);sT=setTimeout(push,2500);}
@@ -423,6 +441,7 @@ var LB=(function(){
   return p.then(function(r){if(D!==v)return;D.busy=0;if(ok)ok(r);ddraw();},function(e){if(D!==v)return;D.busy=0;if(e&&e.status===401&&ME){dclose();lost();return;}D.ps=null;D.shake=e&&(e.status===403||e.status===423);D.err=e&&e.message||"Something went wrong.";ddraw();});}
  function ddraw(){var c=$("dlc");c.innerHTML="";var v=D.v,dis=!!D.busy;if(!v)return;
   var H=function(t){c.appendChild(el("h2","",t));},P=function(t,cl){c.appendChild(el("p",cl||"",t));},L=function(t){c.appendChild(el("label","",t));},R=function(){c.appendChild(row.apply(null,arguments));};
+  if((v==="claim"||v==="name")&&!dis)tsStart();
   if(v==="claim"){H("Welcome back");P("Enter your PIN to bring your leaderboard entry and map to this device.","mu");
    if(hasLocal())P("This replaces the map that's on this device now.","wn");
    var p=pinIn(),cg=function(){claimGo(p.value);},bx=el("div","pinbox");bx.appendChild(p);enter(p,cg);bx.appendChild(pad([p],cg,dis));c.appendChild(bx);
@@ -446,15 +465,18 @@ var LB=(function(){
        Elsewhere it copies the image and the caption to the clipboard in one go, so they can be pasted into a message. */
     var f=new File([D.img.blob],"travel-globe-passport-"+D.t+".png",{type:"image/png"}),cap=D.img.text+" "+site(),
      sd={files:[f],text:cap},sh=false;try{sh=!!(navigator.canShare&&navigator.canShare(sd));}catch(e){}
-    var cb=!sh&&window.ClipboardItem&&navigator.clipboard&&navigator.clipboard.write,bs=[];
-    bs.push(B("Download","",function(){var a=el("a");a.href=D.img.url;a.download=f.name;document.body.appendChild(a);a.click();a.remove();}));
+    /* Firefox on Android can share text but not files: save the image, share the text + link. */
+    var tx=!sh&&!!navigator.share,cb=!sh&&!tx&&window.ClipboardItem&&navigator.clipboard&&navigator.clipboard.write,bs=[];
+    bs.push(B(tx?"Save image":"Download","",function(){var a=el("a");a.href=D.img.url;a.download=f.name;document.body.appendChild(a);a.click();a.remove();}));
     bs.push(B("Copy text","",function(){copy(cap,"Text and link copied");}));
     if(sh)bs.push(B("Share…","pr",function(){navigator.share(sd).catch(function(e){if(e&&e.name!=="AbortError")navigator.share({files:[f]}).catch(function(){});});}));
+    else if(tx)bs.push(B("Share link…","pr",function(){navigator.share({text:cap}).catch(function(){});}));
     else if(cb)bs.push(B("Copy image + text","pr",function(){
      navigator.clipboard.write([new ClipboardItem({"image/png":D.img.blob,"text/plain":new Blob([cap],{type:"text/plain"})})])
       .then(function(){toast("Passport copied. Paste it into a message");},function(){copy(cap,"Text and link copied. Use Download for the image");});}));
     acts.apply(null,[c].concat(bs));
-    if(!sh)P("Tip: on a phone, Share sends the passport and the link together.","mu sm");
+    if(tx)P("This browser can't attach images when sharing. Save the image, then add it to your post or message. Safari and Chrome can share both at once.","mu sm");
+    else if(!sh)P("Tip: on a phone, Share sends the passport and the link together.","mu sm");
     if(D.pinNew)P("Your private edit link is saved under ⚙ Your entry on the Leaderboard tab.","mu sm");}
    else if(!D.err)c.appendChild(el("div","ph","Creating your passport…"));}
   else if(v==="me"){H("Your entry");
@@ -625,7 +647,7 @@ var LB=(function(){
  $("shb").onclick=function(){share();};
  $("dlx").onclick=dclose;
  $("rkc").onclick=function(){cur="board";render();};
- $("dlg").addEventListener("close",function(){if(D.img)URL.revokeObjectURL(D.img.url);D={};$("tsb").innerHTML="";});
+ $("dlg").addEventListener("close",function(){if(D.img)URL.revokeObjectURL(D.img.url);D={};tsStop();});
  var h=/^#me=([0-9a-f-]{36})\.([A-Za-z0-9_-]{20,})$/.exec(location.hash),cl=null;
  if(h){try{history.replaceState(null,"",location.pathname+location.search);}catch(e){}
   if(!(ME&&ME.id===h[1]))cl={id:h[1],link:h[2]};else if(!ME.link){ME.link=h[2];setME(ME);}}
