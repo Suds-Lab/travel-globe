@@ -73,9 +73,12 @@ DELETE FROM devices WHERE entry_id = '…'; DELETE FROM entries WHERE id = '…'
 
 ## How the leaderboard UI flows
 
-- **Map tabs:** a 📤 Share button next to the score. Once joined, a 🏆 #rank badge links to the board.
+- **Look:** dark only. Black background, gray grouped cards, bold numbers, green accent (`--acc` in the `:root` block of `public/index.html`). Level colors are `--l1`…`--l5`; the passport image uses the same ones. (Original Travel Globe colors: blue, green, yellow, orange, red.) The passport keeps its own navy-and-gold look.
+- **Map tabs:** a stats card (points · places · rank; rank links to the board), a Breakdown card with a bar per level, the map, then the selected-place card.
+
+- **Share:** the round share icon in the top-right corner.
 - **Board tab:** a one-line "you" bar (Join, or your name + rank, Share and ⚙), a Globe / US states / Canada switcher that starts on the last map tab you used, and one list at a time.
-- **Share:** a first-time visitor gets a random name pre-filled (editable, 🎲 for another), then gets a one-time offer to set a PIN (skippable), then the image. Later shares go straight to the image. The image is a 1080×1080 PNG drawn in the browser: a map of your colored places, name, points, rank and the site address. Phones get the system share sheet; desktops get Download and Copy link. Edit links are never put in the image or share text.
+- **Share:** a first-time visitor gets a random name pre-filled (editable, 🎲 for another), then a one-time PIN offer (skippable), then the passport. Later shares go straight to the passport. It's a 1080×1920 (story-size) PNG drawn in the browser: a hatched map with visited places in their level colors, round flags in as many centered rows as needed (countries from the `flag-icons` package on jsDelivr; US state/territory and Canadian province flags from Wikimedia Commons), the holder's name, stats (countries + continents / states + Census regions / provinces + regions, % covered, points, rank), and a passport-style machine-readable strip. The site address is taken from the page's own URL, so it always shows the real domain. Phones get the system share sheet; desktops get Download and Copy link. Edit links are never put in the image or share text.
 - **⚙ Your entry:** name (or 🎲 random), set PIN / copy edit link / change PIN / replace link, and leave the leaderboard.
 - **PIN entry:** one box at a time. Setting a PIN asks "Choose a PIN", then "Enter it again to confirm" (a mismatch starts over); changing it asks current → new → confirm. Each step has an on-screen numpad (↵ = next). On touch screens it replaces the system keyboard; on desktops typing still works.
 - **Opening an edit link:** shows a "Welcome back" PIN popup over the map.

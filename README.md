@@ -12,7 +12,7 @@ This repo builds on that original with the author's permission. Thank you!
 - **Three boards:** Globe, US states and Canada, on the 🏆 Board tab.
 - **No accounts:** joining gives you a random name like "Teal Falcon 2390". You can change it to your own name any time.
 - **Edit link + PIN (optional):** set a PIN to get a private edit link. Opening the link and entering the PIN brings your entry and your whole map to another device.
-- **Share:** creates an image with your map, name, points, rank and the site address, ready for the share sheet or download.
+- **Share:** creates a story-size "travel passport" with your map, flags, countries/continents (or states/provinces and regions), points, rank and the site address.
 - **Privacy:** the public board only shows name, points and number of places. Which places you visited is stored privately and only returned to your own devices.
 
 ## Layout
