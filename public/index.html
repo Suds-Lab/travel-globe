@@ -6,7 +6,7 @@
 /* Dark, card-based theme: black canvas, grouped gray cards, bold numerals, green status accents */
 :root{color-scheme:dark;--bg:#000;--card:#121316;--card2:#1c1d21;--fill:#2a2b30;--bd:#25262b;--fg:#f5f5f7;--mut:#8e8e93;--acc:#30d158;--accT:rgba(48,209,88,.14);--red:#ff453a;--amber:#ffd60a;
  --ocean:#07080a;--land:#2a2c31;--l0:#2a2c31;--l1:#5b8def;--l2:#3fcf8e;--l3:#f7c948;--l4:#f58a42;--l5:#e5484d;
- --r:16px;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+ --r:16px;box-sizing:border-box}
 *{box-sizing:border-box}
 body{margin:0 auto;background:var(--bg);color:var(--fg);font:15px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI",Roboto,sans-serif;padding:16px;max-width:760px;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
 button,input{font:inherit;color:var(--fg)}
@@ -104,6 +104,49 @@ summary::after{content:"›";color:var(--mut);font-size:20px;transform:rotate(90
 #toast::before{content:"";position:absolute;left:15px;top:50%;width:9px;height:9px;margin-top:-4.5px;border-radius:50%;background:var(--acc)}
 #toast.on{opacity:1;transform:translate(-50%,0)}
 .cr{color:var(--mut);font-size:12px;margin:20px 0 4px;text-align:center}.cr a{color:inherit}
+/* ---- glass (Aero-style): clear panels with a bright edge and sheen, blurring what's behind them ---- */
+:root{--glass:rgba(255,255,255,.05);--glass2:rgba(30,31,35,.72);--edge:rgba(255,255,255,.13);--sheen:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.012) 40%,rgba(255,255,255,.03));--blur:blur(26px) saturate(210%)}
+
+.tabs,.stats,details#key,#q,#panel,#lb .you,#lb ol,.t,.ui .seg{background-color:var(--glass);background-image:var(--sheen);border:1px solid var(--edge);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);box-shadow:0 8px 30px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08)}
+#q{background:var(--glass) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%238e8e93' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='7' cy='7' r='5.2'/%3E%3Cpath d='m11 11 3.5 3.5'/%3E%3C/svg%3E") 12px 50%/16px no-repeat}
+
+.tabs button.on,.ui .seg button.on{background:rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 2px 8px rgba(0,0,0,.35)}
+#mw{border:1px solid var(--edge);box-shadow:0 8px 30px rgba(0,0,0,.4)}
+.zb button,.ib{background:rgba(255,255,255,.1);border:1px solid var(--edge);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+.lv button,.ui button:not(.pr):not(.lk),.ui input{background-color:rgba(255,255,255,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.ui .seg button:not(.on){background:none;box-shadow:none}
+.ui .pad button:not(.pr){background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.07)}
+#lb li.me{background:rgba(48,209,88,.16)}
+#dlg{background-color:var(--glass2);background-image:var(--sheen);border:1px solid var(--edge);-webkit-backdrop-filter:blur(34px) saturate(210%);backdrop-filter:blur(34px) saturate(210%)}
+#dlg::backdrop{background:rgba(0,0,0,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+#toast{background:rgba(44,45,50,.6);border:1px solid var(--edge);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.tabs,.stats,details#key,#q,#panel,#lb .you,#lb ol,.t,.ui .seg{background-color:var(--card)}#dlg{background-color:var(--card2)}#toast{background:#2c2d32}}
+@media (prefers-reduced-transparency:reduce){.tabs,.stats,details#key,#panel,#lb .you,#lb ol,.t,.ui .seg{background-color:var(--card)}#dlg{background-color:var(--card2)}}
+
+/* ---- fixed glass bars: content scrolls underneath, and each bar blurs + takes on the colors passing below it ---- */
+.top{position:fixed;top:0;left:0;right:0;z-index:20;margin:0;padding:calc(env(safe-area-inset-top,0px) + 10px) max(16px,calc((100vw - 728px)/2)) 10px;background:rgba(0,0,0,.32);-webkit-backdrop-filter:blur(20px) saturate(190%);backdrop-filter:blur(20px) saturate(190%);border-bottom:1px solid rgba(255,255,255,.08)}
+.top h1{font-size:24px}
+body{padding-top:calc(env(safe-area-inset-top,0px) + 76px);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 24px)}
+.tabs{position:sticky;top:calc(env(safe-area-inset-top,0px) + 70px);z-index:15;background-color:rgba(20,21,24,.4);-webkit-backdrop-filter:blur(20px) saturate(190%);backdrop-filter:blur(20px) saturate(190%)}
+.tabs svg{display:none}
+#q,.ui input{font-size:16px}
+/* ---- phones (mobile first) ---- */
+@media (max-width:699px){
+ body{padding:calc(env(safe-area-inset-top,0px) + 70px) 12px calc(env(safe-area-inset-bottom,0px) + 100px)}
+ .top{padding:calc(env(safe-area-inset-top,0px) + 8px) 14px 8px}.top h1{font-size:22px}
+ .tabs{position:fixed;top:auto;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);margin:0;padding:5px;border-radius:24px;background-color:rgba(20,21,24,.42);box-shadow:0 10px 30px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.1)}
+ .tabs button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 2px 6px;font-size:11px;border-radius:19px;min-height:52px}
+ .tabs svg{display:block;width:23px;height:23px}
+ .tabs button.on{color:var(--acc)}
+ #mw{margin-inline:-12px;border-radius:0;border-left:0;border-right:0}
+ #g{max-height:none}
+ .zb button{width:44px;height:44px}
+ #panel{position:sticky;bottom:calc(env(safe-area-inset-bottom,0px) + 86px);z-index:4;background-color:rgba(24,25,29,.62)}
+ .stats b{font-size:26px}.stats>div,.stats>button{padding:0 10px}
+ .lv button{min-height:52px}
+ #toast{bottom:calc(env(safe-area-inset-bottom,0px) + 94px)}
+ .h{display:none}
+}
 </style></head><body>
 <header class="top"><h1>Travel Globe</h1><button id="shb" class="ib" aria-label="Share your travel passport" title="Share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5"/><path d="M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg></button></header>
 <div class="tabs" id="tabs"></div>
@@ -129,6 +172,7 @@ summary::after{content:"›";color:var(--mut);font-size:20px;transform:rotate(90
 var LV=["Never been here","Passed here","Visited here","Stayed here","Extensively visited","Lived here"],DS=["","Drove through, stopped for gas etc., or airport connection","Visited and actually did something significant, but didn't stay overnight","Stayed for at least 1 night","Stayed for at least 15 nights (can be over multiple trips)","Stayed for at least 30 consecutive nights"],TER=[["PR","Puerto Rico","Puerto Rico"],["VI","U.S. Virgin Islands","US Virgin Is."],["GU","Guam","Guam"],["AS","American Samoa","Am. Samoa"],["MP","Northern Mariana Islands","N. Mariana Is."]],CS=0;//"","Transported through: car, train, a layover, or a gas stop","Stopped at a specific attraction","Roughly 18 to 72 hours","72 hours or more","Paid at least a month’s rent"],CS=0;
 var MK="VAT,Vatican City,41.9,12.45;MCO,Monaco,43.73,7.42;SMR,San Marino,43.94,12.46;LIE,Liechtenstein,47.14,9.55;AND,Andorra,42.55,1.6;MLT,Malta,35.9,14.4;LUX,Luxembourg,49.8,6.1;SGP,Singapore,1.35,103.82;BHR,Bahrain,26.07,50.55;MDV,Maldives,3.2,73.2;SYC,Seychelles,-4.68,55.49;MUS,Mauritius,-20.3,57.55;COM,Comoros,-11.65,43.35;STP,São Tomé and Príncipe,0.25,6.6;CPV,Cabo Verde,16,-24;BRB,Barbados,13.19,-59.54;LCA,Saint Lucia,13.9,-60.97;VCT,Saint Vincent and the Grenadines,13.25,-61.2;GRD,Grenada,12.12,-61.68;ATG,Antigua and Barbuda,17.06,-61.8;KNA,Saint Kitts and Nevis,17.36,-62.78;DMA,Dominica,15.42,-61.35;PLW,Palau,7.5,134.6;MHL,Marshall Islands,7.1,171.2;FSM,Micronesia,6.9,158.2;NRU,Nauru,-0.53,166.93;KIR,Kiribati,1.87,-157.4;TUV,Tuvalu,-8.52,179.2;TON,Tonga,-21.18,-175.2;WSM,Samoa,-13.76,-172.1;BRN,Brunei,4.5,114.7;TLS,Timor-Leste,-8.87,125.73;SWZ,Eswatini,-26.5,31.5;HKG,Hong Kong,22.32,114.17;MAC,Macao,22.2,113.55";
 var CA="Alberta,British Columbia,Manitoba,New Brunswick,Newfoundland and Labrador,Northwest Territories,Nova Scotia,Nunavut,Ontario,Prince Edward Island,Quebec,Saskatchewan,Yukon".split(",");
+var TI={world:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3C9.5 5.7 8.2 8.7 8.2 12s1.3 6.3 3.8 9"/>',us:'<rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M10.5 5v6.5H2.5M10.5 8.25h11M10.5 11.5h11M2.5 14.75h19"/><g fill="currentColor" stroke="none"><circle cx="5.1" cy="7.4" r=".65"/><circle cx="7.9" cy="7.4" r=".65"/><circle cx="6.5" cy="9.3" r=".65"/></g>',ca:'<rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M7.2 5v14M16.8 5v14"/><path fill="currentColor" stroke="none" d="M12.00 8.82 12.59 10.00 13.41 9.63 13.11 11.48 14.22 10.74 14.00 11.70 15.11 11.93 14.00 12.96 14.22 13.63 12.26 13.33 12.26 15.18 11.74 15.18 11.74 13.33 9.78 13.63 10.00 12.96 8.89 11.93 10.00 11.70 9.78 10.74 10.89 11.48 10.59 9.63 11.41 10.00 12.00 8.82Z"/>',board:'<path d="M3 20h18M5 20v-7h4v7M10 20V5h4v15M15 20v-10h4v10"/>'};
 var TABS=[["world","Globe"],["us","US states"],["ca","Canada"],["board","Leaderboard"]];
 var S={world:{},us:{},ca:{}},SEL={},IT={world:[],us:[],ca:[]},NM={world:{},us:{},ca:{}},LL={},FL={},FT={us:[0,0,1],ca:[0,0,1]};
 var cur="world",r=[-10,-25],K=1,R=180;
@@ -201,7 +245,7 @@ function tiles(){
 }
 function render(){
  var tb=$("tabs");tb.innerHTML="";
- TABS.forEach(function(t){var b=el("button",t[0]===cur?"on":"",t[1]);b.onclick=function(){cur=t[0];render();};tb.appendChild(b);});
+ TABS.forEach(function(t){var b=el("button",t[0]===cur?"on":"");b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+TI[t[0]]+"</svg>";b.appendChild(el("span","",t[1]));b.onclick=function(){cur=t[0];render();};tb.appendChild(b);});
  var B=cur==="board";["scr","key","mw","panel","hint","foot"].forEach(function(i){$(i).style.display=B?"none":"";});$("lb").style.display=B?"":"none";
  if(B){$("q").style.display="none";$("grid").style.display="none";if(window.LB)LB.show();return;}
  var w=cur==="world";

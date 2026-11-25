@@ -73,6 +73,7 @@ DELETE FROM devices WHERE entry_id = '…'; DELETE FROM entries WHERE id = '…'
 
 ## How the leaderboard UI flows
 
+- **Layout (mobile first):** a fixed glass header (title + share) and, on phones, a fixed glass bottom tab bar with icons. Content scrolls underneath both bars, which blur it and take on its colors. On phones the map is edge to edge and the selected-place card stays pinned above the tab bar. Screens 700px and wider get the tabs at the top instead. Text fields use 16px text so iPhone doesn't zoom in on tap. Browsers without blur support, or with Reduce Transparency on, get solid bars and cards.
 - **Look:** dark only. Black background, gray grouped cards, bold numbers, green accent (`--acc` in the `:root` block of `public/index.html`). Level colors are `--l1`…`--l5`; the passport image uses the same ones. (Original Travel Globe colors: blue, green, yellow, orange, red.) The passport keeps its own navy-and-gold look.
 - **Map tabs:** a stats card (points · places · rank; rank links to the board), a Breakdown card with a bar per level, the map, then the selected-place card.
 
