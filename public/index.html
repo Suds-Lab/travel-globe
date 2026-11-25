@@ -442,11 +442,19 @@ var LB=(function(){
    acts(c,back(),B("Skip","",function(){D.after();},dis),B(dis?"Saving…":D.ps.k===1?"Set PIN":"Next","pr",sp,dis));}
   else if(v==="img"){H("Your travel passport");c.appendChild(seg(D.t,function(t){D.t=t;makeImg();},dis));
    if(D.img){var im=el("img");im.src=D.img.url;im.alt="Travel Globe passport";c.appendChild(im);
-    var f=new File([D.img.blob],"travel-globe-passport-"+D.t+".png",{type:"image/png"}),sh=navigator.canShare&&navigator.canShare({files:[f]}),bs=[];
-    bs.push(B("Copy link","",function(){copy(site(),"Link copied");}));
-    bs.push(B("Download",sh?"":"pr",function(){var a=el("a");a.href=D.img.url;a.download=f.name;document.body.appendChild(a);a.click();a.remove();}));
-    if(sh)bs.push(B("Share…","pr",function(){navigator.share({files:[f],text:D.img.text+" "+site()}).catch(function(){});}));
+    /* Share sends the image and the caption + link together. Phones (and Safari/Edge on desktop) get the system share sheet.
+       Elsewhere it copies the image and the caption to the clipboard in one go, so they can be pasted into a message. */
+    var f=new File([D.img.blob],"travel-globe-passport-"+D.t+".png",{type:"image/png"}),cap=D.img.text+" "+site(),
+     sd={files:[f],text:cap},sh=false;try{sh=!!(navigator.canShare&&navigator.canShare(sd));}catch(e){}
+    var cb=!sh&&window.ClipboardItem&&navigator.clipboard&&navigator.clipboard.write,bs=[];
+    bs.push(B("Download","",function(){var a=el("a");a.href=D.img.url;a.download=f.name;document.body.appendChild(a);a.click();a.remove();}));
+    bs.push(B("Copy text","",function(){copy(cap,"Text and link copied");}));
+    if(sh)bs.push(B("Share…","pr",function(){navigator.share(sd).catch(function(e){if(e&&e.name!=="AbortError")navigator.share({files:[f]}).catch(function(){});});}));
+    else if(cb)bs.push(B("Copy image + text","pr",function(){
+     navigator.clipboard.write([new ClipboardItem({"image/png":D.img.blob,"text/plain":new Blob([cap],{type:"text/plain"})})])
+      .then(function(){toast("Passport copied. Paste it into a message");},function(){copy(cap,"Text and link copied. Use Download for the image");});}));
     acts.apply(null,[c].concat(bs));
+    if(!sh)P("Tip: on a phone, Share sends the passport and the link together.","mu sm");
     if(D.pinNew)P("Your private edit link is saved under ⚙ Your entry on the Leaderboard tab.","mu sm");}
    else if(!D.err)c.appendChild(el("div","ph","Creating your passport…"));}
   else if(v==="me"){H("Your entry");
