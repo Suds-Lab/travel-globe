@@ -89,5 +89,9 @@ const save = env.ALLOW_NO_TURNSTILE; delete env.ALLOW_NO_TURNSTILE;
 r = await api("POST", "/api/join", {}); ok(r.s === 503, "join refused without turnstile secret", r);
 env.ALLOW_NO_TURNSTILE = save;
 r = await api("GET", "/api/nope"); ok(r.s === 404, "404", r);
+// tab addresses serve the page itself (index at "/")
+{ const seen = []; const prev = env.ASSETS; env.ASSETS = { fetch: async (rq) => { seen.push(new URL(rq.url).pathname); return new Response("page"); } };
+  for (const p of ["/usa", "/leaderboard/", "/favicon.svg"]) await W.fetch(new Request("https://t.example" + p), env, ctx);
+  ok(seen.join() === "/,/,/favicon.svg", "tab paths serve the page", seen); env.ASSETS = prev; }
 console.log(`${pass} passed, ${failN} failed`);
 process.exit(failN ? 1 : 0);

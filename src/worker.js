@@ -33,9 +33,13 @@ class HttpError extends Error {
   }
 }
 
+const APP_PATHS = new Set(["/globe", "/usa", "/canada", "/leaderboard"]);
+
 export default {
   async fetch(req, env, ctx) {
     const url = new URL(req.url);
+    // Tab addresses are the same single page; the page reads the path to pick the tab.
+    if (APP_PATHS.has(url.pathname.replace(/\/+$/, ""))) return env.ASSETS.fetch(new Request(new URL("/", url), req));
     if (!url.pathname.startsWith("/api/")) return env.ASSETS.fetch(req);
     try {
       return await route(req, env, ctx, url);

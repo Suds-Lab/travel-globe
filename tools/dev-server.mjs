@@ -10,7 +10,8 @@ const { default: W } = await import(workerPath);
 const env = { DB: { prepare: (s) => stmt(s), batch: (ss) => q({ batch: ss.map((s) => ({ sql: s.sql, params: s.params })) }) }, ALLOW_NO_TURNSTILE: "1",
   /* optional: TURNSTILE_SITE_KEY=1x00000000000000000000AA TURNSTILE_SECRET=1x0000000000000000000000000000000AA (Cloudflare test keys, always pass) */
   ...(process.env.TURNSTILE_SITE_KEY && { TURNSTILE_SITE_KEY: process.env.TURNSTILE_SITE_KEY, TURNSTILE_SECRET: process.env.TURNSTILE_SECRET }) };
-const T = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".png": "image/png" };
+const T = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".png": "image/png", ".svg": "image/svg+xml" };
+const APP = new Set(["/globe", "/usa", "/canada", "/leaderboard"]); // tab addresses serve the same page, like the worker
 http.createServer(async (req, res) => {
   const u = new URL(req.url, "http://localhost:" + port);
   if (u.pathname.startsWith("/api/")) {
@@ -18,7 +19,7 @@ http.createServer(async (req, res) => {
     const r = await W.fetch(new Request(u, { method: req.method, headers: req.headers, body: ["GET", "HEAD"].includes(req.method) ? undefined : Buffer.concat(chunks) }), env, { waitUntil() {} });
     res.writeHead(r.status, Object.fromEntries(r.headers)); res.end(Buffer.from(await r.arrayBuffer())); return;
   }
-  const f = path.join(pub, u.pathname === "/" ? "index.html" : path.normalize(u.pathname));
+  const f = path.join(pub, u.pathname === "/" || APP.has(u.pathname.replace(/\/+$/, "")) ? "index.html" : path.normalize(u.pathname));
   if (!f.startsWith(pub) || !fs.existsSync(f)) { res.writeHead(404); return res.end("not found"); }
   res.writeHead(200, { "content-type": T[path.extname(f)] || "application/octet-stream" }); fs.createReadStream(f).pipe(res);
 }).listen(+port, "127.0.0.1", () => console.log("http://localhost:" + port));
