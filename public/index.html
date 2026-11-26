@@ -717,8 +717,11 @@ var LB=(function(){
    if(suf){var w=x.measureText(String(val)).width;x.fillStyle=SOFT;x.font="600 "+Math.round(big*.4)+"px "+F;x.fillText(suf,sx+w+10,vy);}};
   st2(P.a,s.n,"/ "+s.tot,lx,sy+345,84);st2(P.b,s.g,"/ "+P.bt,lx+430,sy+345,84);
   st2(P.pc,s.pct+"%","",lx,sy+500,62);st2("POINTS",s.pts,"",lx+300,sy+500,62);st2("RANK",s.rank?"#"+s.rank:"–",s.rank?"of "+s.total:"",lx+580,sy+500,62);
-  var mz=mrz(t,name,s,host),fs=30;x.font="600 "+fs+"px "+MO;var mw=Math.max(x.measureText(mz[0]).width,x.measureText(mz[1]).width);if(mw>CW-120){fs=Math.floor(fs*(CW-120)/mw);x.font="600 "+fs+"px "+MO;}
-  x.fillStyle=TXT;x.fillText(mz[0],lx,sy+660);x.fillText(mz[1],lx,sy+660+fs*1.4);
+  var mz=mrz(t,name,s,host),fs=30,av=CW-120;x.font="600 "+fs+"px "+MO;
+  var need=Math.max(mz[0].length,mz[1].length+mz[2].length),cw=x.measureText("<").width;
+  if(need*cw>av){fs=Math.floor(fs*av/(need*cw));x.font="600 "+fs+"px "+MO;cw=x.measureText("<").width;}
+  var n=Math.max(need,Math.floor(av/cw)),fill=function(v,k){while(v.length<k)v+="<";return v;},m1=fill(mz[0],n),m2=fill(mz[1],n-mz[2].length)+mz[2];
+  x.fillStyle=TXT;x.fillText(m1,lx,sy+660);x.fillText(m2,lx,sy+660+fs*1.4);
   x.restore();rr(x,X,Y,CW,CH,44);x.strokeStyle="rgba(233,196,106,.28)";x.lineWidth=2;x.stroke();
   x.textAlign="center";x.fillStyle=SOFT;x.font="500 30px "+F;x.fillText("Map your travels at",W/2,1800);x.fillStyle=GOLD;x.font="800 42px "+F;x.fillText(host,W/2,1856);
   var text=s.rank?"I'm #"+s.rank+" on the Travel Globe "+TN[t]+" leaderboard: "+s.n+" "+P.a.toLowerCase()+", "+s.pts+" pts!":"My Travel Globe "+TN[t]+" passport: "+s.n+" "+P.a.toLowerCase()+", "+s.pts+" pts!";
@@ -732,9 +735,9 @@ var LB=(function(){
    x.restore();ring(px,py);});
   x.textAlign="left";x.textBaseline="alphabetic";}
  function mrz(t,name,s,host){var cl=function(v){return String(v).toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Z0-9]+/g,"<").replace(/^<+|<+$/g,"");},
-  pad=function(v,n){while(v.length<n)v+="<";return v;},d=new Date(),dt=("0"+d.getDate()).slice(-2)+"JANFEBMARAPRMAYJUNJULAUGSEPOCTNOVDEC".substr(d.getMonth()*3,3)+String(d.getFullYear()).slice(2);
-  var l1=pad("P<TGL"+PT[t].mz+"<"+(name?cl(name):"TRAVELER")+"<<",44),h=host.toUpperCase(),left=PT[t].mz+("00"+s.n).slice(-3)+"<PTS"+("000"+s.pts).slice(-4)+"<<ISSUED"+dt+"<<";
-  return[l1,pad(left,Math.max(left.length,44-h.length))+h];}
+  d=new Date(),dt=("0"+d.getDate()).slice(-2)+"JANFEBMARAPRMAYJUNJULAUGSEPOCTNOVDEC".substr(d.getMonth()*3,3)+String(d.getFullYear()).slice(2);
+  /* raw parts; the caller pads with < to the exact width of the card so both lines end at the right edge */
+  return["P<TGL"+PT[t].mz+"<"+(name?cl(name):"TRAVELER")+"<<",PT[t].mz+("00"+s.n).slice(-3)+"<PTS"+("000"+s.pts).slice(-4)+"<<ISSUED"+dt+"<<",host.toUpperCase()];}
  function rr(x,X,Y,w,h,r){x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+w,Y,X+w,Y+h,r);x.arcTo(X+w,Y+h,X,Y+h,r);x.arcTo(X,Y+h,X,Y,r);x.arcTo(X,Y,X+w,Y,r);x.closePath();}
  function fitText(x,s,X,Y,w){while(x.measureText(s).width>w&&s.length>1)s=s.slice(0,-2)+"…";x.fillText(s,X,Y);}
  /* map: unvisited land as fine horizontal lines, visited places filled with their level color */
