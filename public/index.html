@@ -104,7 +104,7 @@ summary::after{content:"›";color:var(--mut);font-size:20px;transform:rotate(90
 .how>div{display:flex;gap:10px;align-items:flex-start}.how p{margin:0;font-size:13px;line-height:1.35}.how strong{display:block;font-size:14px;color:var(--fg)}.how span{color:var(--mut)}
 .how b.n{flex:none;width:22px;height:22px;margin-top:1px;border-radius:50%;background:var(--acc);color:#000;display:grid;place-items:center;font-size:12px}
 .how .wn{margin:2px 0 0;padding:8px 10px;border-radius:12px}
-.ui input.lnk{display:block;width:100%;box-sizing:border-box;font:13px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mut);text-overflow:ellipsis;margin-bottom:8px}
+.ui input.lnk{cursor:copy;display:block;width:100%;box-sizing:border-box;font:13px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mut);text-overflow:ellipsis;margin-bottom:8px}
 #dlg .steps{display:inline-block;margin:2px 0 4px;padding:3px 9px;border-radius:999px;background:var(--accT);color:var(--acc);font-size:12px;font-weight:700}
 #dlg p.step{font-weight:700;font-size:15px;margin:14px 0 0}
 #dlg img{display:block;max-width:100%;height:min(56vh,620px);width:auto;margin:4px auto 0;border-radius:14px}
@@ -565,7 +565,7 @@ var LB=(function(){
   var how=function(){var h=el("div","how");[["Choose a PIN","4–8 digits that only you know."],["Save your private link","We show it right after. Keep it in Notes or email it to yourself."],["Open it anywhere","On a new phone or browser, open the link and type your PIN. Your map and rank come back."]].forEach(function(x,i){var r=el("div");r.appendChild(el("b","n",i+1));var t=el("p");t.appendChild(el("strong","",x[0]));t.appendChild(el("span","",x[1]));r.appendChild(t);h.appendChild(r);});
    h.appendChild(el("p","wn","Without a PIN, your entry lives only in this browser. Clearing it or switching phones loses it."));c.appendChild(h);};
   /* the private link itself, with copy and send-to-myself */
-  var lbox=function(){if(!ME||!ME.link)return;var f=el("input","wide lnk");f.readOnly=true;f.value=link();f.setAttribute("aria-label","Your private link");f.onfocus=function(){f.select();};
+  var lbox=function(){if(!ME||!ME.link)return;var f=el("input","wide lnk");f.readOnly=true;f.value=link();f.setAttribute("aria-label","Your private link");f.onfocus=function(){f.select();};f.onclick=function(){f.select();copy(link(),"Private link copied. Keep it somewhere safe.");};f.title="Tap to copy";
    var bs=[B("Copy link","",function(){copy(link(),"Private link copied. Keep it somewhere safe.");})];
    if(navigator.share)bs.push(B("Send to myself…","",function(){navigator.share({title:"My Travel Globe link",text:"My private Travel Globe link (open it and enter my PIN): "+link()}).catch(function(){});}));
    c.appendChild(f);R.apply(null,bs);P("Open it on another device and enter your PIN. Anyone with the link still needs the PIN.","mu sm");};
