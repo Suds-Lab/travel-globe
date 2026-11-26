@@ -92,6 +92,11 @@ summary::after{content:"›";color:var(--mut);font-size:20px;transform:rotate(90
 #dlg::backdrop{background:rgba(0,0,0,.6);backdrop-filter:blur(2px)}
 #dlg #dlx{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;padding:0;background:var(--fill);color:var(--mut);font-size:13px;font-weight:800}
 #dlg h2{font-size:22px;font-weight:800;letter-spacing:-.01em;margin:0 0 6px;padding-right:36px}#dlg p{margin:6px 0}
+.how{display:grid;gap:10px;margin:4px 0 12px;padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid var(--edge)}
+.how>div{display:flex;gap:10px;align-items:flex-start}.how p{margin:0;font-size:13px;line-height:1.35}.how strong{display:block;font-size:14px;color:var(--fg)}.how span{color:var(--mut)}
+.how b.n{flex:none;width:22px;height:22px;margin-top:1px;border-radius:50%;background:var(--acc);color:#000;display:grid;place-items:center;font-size:12px}
+.how .wn{margin:2px 0 0;padding:8px 10px;border-radius:12px}
+.ui input.lnk{display:block;width:100%;box-sizing:border-box;font:13px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mut);text-overflow:ellipsis;margin-bottom:8px}
 #dlg .steps{display:inline-block;margin:2px 0 4px;padding:3px 9px;border-radius:999px;background:var(--accT);color:var(--acc);font-size:12px;font-weight:700}
 #dlg p.step{font-weight:700;font-size:15px;margin:14px 0 0}
 #dlg img{display:block;max-width:100%;height:min(56vh,620px);width:auto;margin:4px auto 0;border-radius:14px}
@@ -507,7 +512,7 @@ var LB=(function(){
 
  /* ---- popup (one <dialog>, several views) ---- */
  /* every popup gets its own history entry (#join, #pin, #passport, #settings, #welcome-back), so Back closes it */
- function hname(){return({claim:"welcome-back",name:D.share?"share":"join",pin:"pin",img:"passport",me:"settings"})[D.v]||"popup";}
+ function hname(){return({claim:"welcome-back",name:D.share?"share":"join",pin:"pin",link:"link",img:"passport",me:"settings"})[D.v]||"popup";}
  function hsync(){var d=$("dlg");if(!d.open)return;var u=location.pathname+location.search+"#"+hname();
   try{if(history.state&&history.state.dlg){if(location.hash!=="#"+hname())history.replaceState({t:cur,dlg:1},"",u);}else history.pushState({t:cur,dlg:1},"",u);}catch(e){}}
  function dlg(v,o){D=o||{};D.v=v;D.err="";D.ok="";D.busy=0;ddraw();var d=$("dlg");if(!d.open)d.showModal();hsync();}
@@ -516,6 +521,14 @@ var LB=(function(){
  function run(p,ok){D.busy=1;D.err="";D.ok="";ddraw();var v=D;
   return p.then(function(r){if(D!==v)return;D.busy=0;if(ok)ok(r);ddraw();},function(e){if(D!==v)return;D.busy=0;if(e&&e.status===401&&ME){dclose();lost();return;}D.ps=null;D.shake=e&&(e.status===403||e.status===423);D.err=e&&e.message||"Something went wrong.";ddraw();});}
  function ddraw(){var c=$("dlc");c.innerHTML="";var v=D.v,dis=!!D.busy;if(!v)return;hsync();
+  /* what the PIN is for, in three steps */
+  var how=function(){var h=el("div","how");[["Choose a PIN","4–8 digits that only you know."],["Save your private link","We show it right after. Keep it in Notes or email it to yourself."],["Open it anywhere","On a new phone or browser, open the link and type your PIN. Your map and rank come back."]].forEach(function(x,i){var r=el("div");r.appendChild(el("b","n",i+1));var t=el("p");t.appendChild(el("strong","",x[0]));t.appendChild(el("span","",x[1]));r.appendChild(t);h.appendChild(r);});
+   h.appendChild(el("p","wn","Without a PIN, your entry lives only in this browser. Clearing it or switching phones loses it."));c.appendChild(h);};
+  /* the private link itself, with copy and send-to-myself */
+  var lbox=function(){if(!ME||!ME.link)return;var f=el("input","wide lnk");f.readOnly=true;f.value=link();f.setAttribute("aria-label","Your private link");f.onfocus=function(){f.select();};
+   var bs=[B("Copy link","",function(){copy(link(),"Private link copied. Keep it somewhere safe.");})];
+   if(navigator.share)bs.push(B("Send to myself…","",function(){navigator.share({title:"My Travel Globe link",text:"My private Travel Globe link (open it and enter my PIN): "+link()}).catch(function(){});}));
+   c.appendChild(f);R.apply(null,bs);P("Open it on another device and enter your PIN. Anyone with the link still needs the PIN.","mu sm");};
   var H=function(t){c.appendChild(el("h2","",t));},P=function(t,cl){c.appendChild(el("p",cl||"",t));},L=function(t){c.appendChild(el("label","",t));},R=function(){c.appendChild(row.apply(null,arguments));};
   if((v==="claim"||v==="name")&&!dis)tsStart();
   if(v==="claim"){H("Welcome back");P("Enter your PIN to bring your leaderboard entry and map to this device.","mu");
@@ -531,10 +544,14 @@ var LB=(function(){
    var nx=function(){nameGo(n.value.trim());};enter(n,nx);
    acts(c,B("Cancel","",dclose),B(dis?"Joining…":"Next","pr",nx,dis||D.nm==null));
    if(D.nm==null)suggest();else if(!dis)setTimeout(function(){n.focus();n.select();},0);}
-  else if(v==="pin"){H("Want it on your other devices?");if(D.fromName)c.appendChild(el("div","steps",D.share?"Step 2 of 3 · optional":"Step 2 of 2 · optional"));
-   P("Set a PIN and you'll get a private edit link. Open it on another device, enter the PIN, and your map comes along.","mu");
+  else if(v==="pin"){H("Keep your map safe");if(D.fromName)c.appendChild(el("div","steps",D.share?"Step 2 of 3 · optional":"Step 2 of 2 · optional"));
+   how();
    var sp=pinSteps(c,["Choose a PIN (4–8 digits)","Enter it again to confirm"],function(v){pinGo(v[0],v[1]);},dis);
    acts(c,back(),B("Skip","",function(){D.after();},dis),B(dis?"Saving…":D.ps.k===1?"Set PIN":"Next","pr",sp,dis));}
+  else if(v==="link"){H("Save your private link");
+   P("This link plus your PIN is the only way back to your entry on another phone or browser. There's no account or email to recover it, so save it now.","mu");
+   lbox();
+   acts(c,B(D.next?"Done, I saved it":"Done","pr",function(){var f=D.next;if(f){D.next=null;f();}else{D.v="me";D.sub=null;D.ok="PIN set. Your link is saved under Your private link.";ddraw();}}));}
   else if(v==="img"){H("Your travel passport");c.appendChild(seg(D.t,function(t){D.t=t;makeImg();},dis,"img"));
    if(D.img){var im=el("img");im.src=D.img.url;im.alt="Travel Globe passport";c.appendChild(im);
     /* Share sends the image and the caption + link together. Phones (and Safari/Edge on desktop) get the system share sheet.
@@ -561,11 +578,10 @@ var LB=(function(){
    R(n2,B("Save","",sv2,dis),dice);
    L("Other devices");
    if(!MR||!MR.hasPin){
-    if(D.sub!=="setpin"){P("Set a PIN to get a private edit link, so you can open your map on another device.","mu");R(B("Set a PIN","",function(){sub("setpin");}));}
+    if(D.sub!=="setpin"){how();R(B("Set a PIN","pr",function(){sub("setpin");}));}
     else{var s2=pinSteps(c,["Choose a PIN (4–8 digits)","Enter it again to confirm"],function(v){pinGo(v[0],v[1]);},dis);acts(c,back(),B("Cancel","",function(){sub(null);}),B(dis?"Saving…":D.ps.k===1?"Save PIN":"Next","pr",s2,dis));}}
    else if(!ME.link)P("Your edit link is on the device where you set the PIN.","mu");
-   else{R(B("Copy edit link","",function(){copy(link(),"Edit link copied. Keep it private.");}));
-    P("Open it on another device and enter your PIN. Lose the link or forget the PIN and the entry can't be recovered.","mu sm");
+   else{lbox();
     if(D.sub==="chpin"){var s3=pinSteps(c,["Enter your current PIN","Choose a new PIN (4–8 digits)","Enter the new PIN again to confirm"],function(v){chPin(v[0],v[1],v[2]);},dis);acts(c,back(),B("Cancel","",function(){sub(null);}),B(dis?"Saving…":D.ps.k===2?"Change PIN":"Next","pr",s3,dis));}
     else if(D.sub==="relink"){P("The new link replaces the old one and signs out your other devices.","mu sm");var q=pinIn("PIN"),s4=function(){relink(q.value);},bx=el("div","pinbox");bx.appendChild(q);bx.appendChild(pad([q],s4,dis));c.appendChild(bx);acts(c,B("Cancel","",function(){sub(null);}),B("Make new link","pr",s4,dis));pfocus(q);}
     else R(B("Change PIN","lk",function(){sub("chpin");}),B("Replace link","lk",function(){sub("relink");}));}
@@ -583,9 +599,9 @@ var LB=(function(){
  function joined(j,link){setME({id:j.id,dev:j.device,tag:j.tag,name:j.name,link:link});dirty(0);meIn(j);BDt=0;loadBoard();draw();}
  function nameGo(nm){D.nm=nm;run(human().then(function(ts){return call("POST","/join",{ts:ts,data:mapData(),name:nm||undefined});}),function(j){joined(j);
   ME.asked=1;setME(ME);D.v="pin";D.fromName=1;
-  D.after=D.share?function(){D.v="img";makeImg();}:function(){var pn=D.pinNew;dclose();toast(pn?"You're in! Your edit link is under ⚙ Your entry.":"You're on the leaderboard as "+j.name+".");};});}
+  D.after=D.share?function(){D.v="img";makeImg();}:function(){var pn=D.pinNew;dclose();toast(pn?"You're in! Your private link is also under ⚙ on the Leaderboard tab.":"You're on the leaderboard as "+j.name+".");};});}
  function pinGo(a,b){if(!pinOk(a,b))return;run(call("POST","/pin",{pin:a},1),function(j){ME.link=j.link;ME.asked=1;setME(ME);meIn(j);
-  if(D.v==="pin"){D.pinNew=1;D.after();}else{D.sub=null;D.ok="PIN set. Use “Copy edit link” and keep the link somewhere safe.";}});}
+  if(D.v==="pin"){D.pinNew=1;D.next=D.after;}D.sub=null;D.v="link";});}
  function chPin(o,a,b){if(!pinOk(a,b))return;run(call("POST","/pin",{pin:a,link:ME.link,oldPin:o},1),function(j){meIn(j);D.sub=null;D.ok="PIN changed.";});}
  function relink(p){run(call("POST","/relink",{link:ME.link,pin:p},1),function(j){ME.link=j.link;setME(ME);meIn(j);D.sub=null;D.ok="New link made. Copy it again. The old one no longer works.";});}
  function saveName(nm){if(nm!==null&&nm===ME.name)return;D.nm=nm;run(put(nm===null?{reroll:true}:{name:nm}),function(j){meIn(j);D.nm=null;D.ok="Name saved.";BDt=0;loadBoard();draw();});}
@@ -662,7 +678,7 @@ var LB=(function(){
   return Promise.all(show.map(function(v){return t==="world"?flagImg(fcode(v.k)):sflag(t,v.k);})).then(function(imgs){
   var W=1080,H=1920,c=document.createElement("canvas");c.width=W;c.height=H;var x=c.getContext("2d");
   var F="system-ui,-apple-system,'Segoe UI',Roboto,sans-serif",MO="ui-monospace,'SF Mono',Menlo,Consolas,monospace",GOLD="#e9c46a",TXT="#eef2f7",SOFT="rgba(238,242,247,.62)";
-  var L=["#2a3a55","#5b8def","#3fcf8e","#f7c948","#f58a42","#e5484d"],P=PT[t],host=location.host+(location.pathname.length>1?location.pathname.replace(/\/(index\.html)?$/,""):"");
+  var L=["#2a3a55","#5b8def","#3fcf8e","#f7c948","#f58a42","#e5484d"],P=PT[t],host=location.host;/* site root only: the tab path (/usa, /leaderboard…) isn't part of the address people should visit */
   var g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,"#0f2c52");g.addColorStop(1,"#061429");x.fillStyle=g;x.fillRect(0,0,W,H);
   var rg=x.createRadialGradient(W/2,780,80,W/2,780,950);rg.addColorStop(0,"rgba(91,141,239,.28)");rg.addColorStop(1,"rgba(91,141,239,0)");x.fillStyle=rg;x.fillRect(0,0,W,H);
   var X=60,Y=150,CW=960,CH=1560,sy=Y+800,lx=X+60;
@@ -710,13 +726,13 @@ var LB=(function(){
  function fitText(x,s,X,Y,w){while(x.measureText(s).width>w&&s.length>1)s=s.slice(0,-2)+"…";x.fillText(s,X,Y);}
  /* map: unvisited land as fine horizontal lines, visited places filled with their level color */
  function pmap(x,t,X,Y,w,h,L){var fs,pr,st=S[t];
-  if(t==="world"){fs=WF.filter(function(f){return kf(f)!=="AQ"&&kf(f)!=="ATA";});pr=d3.geo.mercator();}
+  if(t==="world"){fs=WF.filter(function(f){return kf(f)!=="AQ"&&kf(f)!=="ATA";});pr=d3.geo.mercator().rotate([-11,0]);/* cut at 169°W (Bering Strait), so Russia's far east doesn't wrap to the left edge */}
   else{var m=mk(t);if(!m)return;fs=m.f;pr=t==="us"?d3.geo.albersUsa():d3.geo.conicConformal().rotate([96,0]).center([0,62]).parallels([49,77]);}
   pr.scale(1).translate([0,0]);var b=d3.geo.path().projection(pr).bounds({type:"FeatureCollection",features:fs}),s=Math.min(w/(b[1][0]-b[0][0]),h/(b[1][1]-b[0][1]));
   pr.scale(s).translate([X+(w-s*(b[1][0]+b[0][0]))/2,Y+(h-s*(b[1][1]+b[0][1]))/2]);
   var p=d3.geo.path().projection(pr).context(x);
   x.save();x.beginPath();fs.forEach(function(f){if(!st[kf(f)])p(f);});x.clip();
-  x.beginPath();for(var yy=Y-6;yy<Y+h+6;yy+=7){x.moveTo(X-20,yy);x.lineTo(X+w+20,yy);}x.strokeStyle="rgba(165,195,245,.55)";x.lineWidth=2.4;x.stroke();x.restore();
+  var sag=h*.07,cx=X+w/2;x.beginPath();for(var yy=Y-sag-8;yy<Y+h+8;yy+=4.6){x.moveTo(X-20,yy);x.quadraticCurveTo(cx,yy+2*sag,X+w+20,yy);}x.strokeStyle="rgba(165,195,245,.62)";x.lineWidth=1.5;x.stroke();x.restore();
   fs.forEach(function(f){var v=st[kf(f)];if(!v)return;x.save();x.beginPath();p(f);x.fillStyle=L[v];x.shadowColor=L[v];x.shadowBlur=16;x.fill();x.restore();});
   if(t==="world")MKs.forEach(function(d){var v=st[d.k];if(!v)return;var q=pr([d.lon,d.lat]);if(!q)return;x.beginPath();x.arc(q[0],q[1],7,0,7);x.fillStyle=L[v];x.fill();x.strokeStyle="#eef2f7";x.lineWidth=2;x.stroke();});}
  /* ---- start: an edit link (#me=<id>.<secret>) opens the PIN popup ---- */
