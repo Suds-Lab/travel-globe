@@ -121,9 +121,17 @@ summary::after{content:"›";color:var(--mut);font-size:20px;transform:rotate(90
 .ui .seg button:not(.on){background:none;box-shadow:none}
 /* sliding selection pill (one per .tabs/.seg): position comes from --i (selected index) and --n (button count), so it needs no measuring */
 .tabs,.seg{position:relative;--pd:3px;--gp:2px}
-.tabs>.pill,.seg>.pill{position:absolute;z-index:0;top:var(--pd);bottom:var(--pd);left:var(--pd);width:calc((100% - 2*var(--pd) - (var(--n,1) - 1)*var(--gp))/var(--n,1));transform:translateX(calc(var(--i,0)*(100% + var(--gp))));border-radius:999px;background:rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 2px 8px rgba(0,0,0,.35);transition:transform .42s cubic-bezier(.34,1.32,.5,1);pointer-events:none}
+.seg{touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.tabs>.pill,.seg>.pill{position:absolute;z-index:0;top:var(--pd);bottom:var(--pd);left:var(--pd);width:calc((100% - 2*var(--pd) - (var(--n,1) - 1)*var(--gp))/var(--n,1));transform:translateX(calc(var(--i,0)*(100% + var(--gp))));border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,.07) 55%,rgba(255,255,255,.13));box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(255,255,255,.14),inset 1px 0 0 rgba(255,255,255,.1),inset -1px 0 0 rgba(255,255,255,.1),0 3px 10px rgba(0,0,0,.35);transition:transform .42s cubic-bezier(.34,1.32,.5,1),background .25s,box-shadow .25s;pointer-events:none}
 .tabs button,.seg button{position:relative;z-index:1;transition:color .25s}
 .tabs button.on,.ui .seg button.on{background:none!important;box-shadow:none!important}
+/* press and drag the pill across the tab bar, like iOS: it lifts while held and drops onto the nearest tab */
+.tabs>.pill.drag,.seg>.pill.drag{transition:transform .09s ease-out,background .2s,box-shadow .2s;background:radial-gradient(120% 90% at 30% 15%,rgba(255,255,255,.16),rgba(255,255,255,.02) 60%),rgba(255,255,255,.03);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.75),inset 0 -1.5px 0 rgba(255,255,255,.3),inset 0 0 14px rgba(255,255,255,.2),0 12px 28px rgba(0,0,0,.5)}
+.tabs.held button.on svg,.seg.held button.on{transform:scale(1.14);transition:transform .2s}
+.tabs button svg{transition:transform .25s}
+/* glass bars: a bright top edge and a faint lower one, like light catching the rim */
+.top{box-shadow:inset 0 -1px 0 rgba(255,255,255,.06)}
+.tabs{box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 -1px 0 rgba(255,255,255,.05),0 10px 30px rgba(0,0,0,.45)}
 @media (prefers-reduced-motion:reduce){.tabs>.pill,.seg>.pill{transition:none}}
 .ui .pad button:not(.pr){background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.07)}
 #lb li.me{background:rgba(48,209,88,.16)}
@@ -135,27 +143,30 @@ summary::after{content:"›";color:var(--mut);font-size:20px;transform:rotate(90
 
 /* ---- fixed glass bars: content scrolls underneath, and each bar blurs + takes on the colors passing below it ---- */
 .top{position:fixed;top:0;left:0;right:0;z-index:20;margin:0;padding:calc(env(safe-area-inset-top,0px) + 10px) max(16px,calc((100vw - 728px)/2)) 10px;background:rgba(0,0,0,.32);-webkit-backdrop-filter:blur(20px) saturate(190%);backdrop-filter:blur(20px) saturate(190%);border-bottom:1px solid rgba(255,255,255,.08)}
-.top h1{font-size:24px}
-body{padding-top:calc(env(safe-area-inset-top,0px) + 76px);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 24px)}
-.tabs{position:sticky;top:calc(env(safe-area-inset-top,0px) + 70px);z-index:15;background-color:rgba(20,21,24,.4);-webkit-backdrop-filter:blur(20px) saturate(190%);backdrop-filter:blur(20px) saturate(190%)}
+.top h1{font-size:24px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* --toph / --tabh are the measured bar heights (set from JS), so bigger system text never hides content under the bars */
+body{padding-top:calc(var(--toph,calc(env(safe-area-inset-top,0px) + 64px)) + 10px);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 24px)}
+.tabs{position:sticky;top:var(--toph,calc(env(safe-area-inset-top,0px) + 64px));user-select:none;-webkit-user-select:none;z-index:15;background-color:rgba(20,21,24,.4);-webkit-backdrop-filter:blur(20px) saturate(190%);backdrop-filter:blur(20px) saturate(190%)}
 .tabs svg{display:none}
 #q,.ui input{font-size:16px}
 /* ---- phones (mobile first) ---- */
 @media (max-width:699px){
- body{padding:calc(env(safe-area-inset-top,0px) + 70px) 12px calc(env(safe-area-inset-bottom,0px) + 100px)}
- .top{padding:calc(env(safe-area-inset-top,0px) + 8px) 14px 8px}.top h1{font-size:22px}
- .tabs{position:fixed;top:auto;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);margin:0;padding:5px;border-radius:999px;background-color:rgba(20,21,24,.42);box-shadow:0 10px 30px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.1)}
- .tabs button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 2px 6px;font-size:11px;border-radius:999px;min-height:52px}
- .tabs svg{display:block;width:23px;height:23px}
+ body{padding:calc(var(--toph,calc(env(safe-area-inset-top,0px) + 64px)) + 8px) 12px calc(var(--tabh,56px) + env(safe-area-inset-bottom,0px) + 28px)}
+ .top{padding:calc(env(safe-area-inset-top,0px) + 6px) 14px 6px}.top h1{font-size:20px}.top .ib{width:36px;height:36px}
+ .tabs{position:fixed;top:auto;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);margin:0;padding:4px;border-radius:999px;touch-action:none;background-color:rgba(20,21,24,.42);box-shadow:0 10px 30px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(255,255,255,.06)}
+ .tabs button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:5px 2px 4px;font-size:10.5px;border-radius:999px;min-height:46px;min-width:0}
+ .tabs svg{display:block;width:21px;height:21px;flex:none}
+ .tabs span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .tabs.ico span{display:none}
  .tabs button.on{color:var(--acc)}
- .tabs{--pd:5px}
+ .tabs{--pd:4px}
  #mw{margin-inline:-12px;border-radius:0;border-left:0;border-right:0}
  #g{max-height:none}
  .zb button{width:44px;height:44px}
- #panel{position:sticky;bottom:calc(env(safe-area-inset-bottom,0px) + 86px);z-index:4;background-color:rgba(24,25,29,.62)}
+ #panel{position:sticky;bottom:calc(var(--tabh,56px) + env(safe-area-inset-bottom,0px) + 18px);z-index:4;background-color:rgba(24,25,29,.62)}
  .stats b{font-size:26px}.stats>div,.stats>button{padding:0 10px}
  .lv button{min-height:52px}
- #toast{bottom:calc(env(safe-area-inset-bottom,0px) + 94px)}
+ #toast{bottom:calc(var(--tabh,56px) + env(safe-area-inset-bottom,0px) + 24px)}
  .h{display:none}
 }
 </style></head><body>
@@ -233,9 +244,15 @@ function mk(t){
  return FL[t]={f:f,p:d3.geo.path().projection(pr)};
 }
 function applyT(){var T=FT[cur],g=$("fg-"+cur);if(g)g.setAttribute("transform","translate("+T[0]+","+T[1]+") scale("+T[2]+")");}
+/* overseas territories aren't separate countries on the globe; they show their country's colour
+   (US territories use their own level from the US tab when it's set) */
+var PAR={US:"PR,VI,GU,AS,MP",FR:"GF,GP,RE,MQ,YT,PF,NC,PM,WF,MF,BL,GO,JU,TF",GB:"GI,GS,TC,VG,MS,SH,PN,IO,BM,KY,AI,FK,JE,GG,IM",NL:"SX,BQ,AW,CW",NO:"SJ,BV",AU:"NF,HM,CC,CX",NZ:"TK,NU,CK",DK:"FO",FI:"AX"},PARK={};
+for(var pc in PAR)PAR[pc].split(",").forEach(function(c){PARK[c]=pc;});
+function par(id){id=String(id);var p=/^UM-/.test(id)?"US":PARK[id];if(p==="GB"&&!TRK.GB)p="GB-ENG";return p&&TRK[p]?p:null;}
 function paint(){
  if(!S[cur])return;var st=S[cur],sel=cur==="world"?"#g [data-k]":"#fg-"+cur+" [data-k]"+(cur==="us"?",#tg [data-k]":"");
  [].forEach.call(document.querySelectorAll(sel),function(e){var k=e.getAttribute("data-k");e.setAttribute("class","c v"+(st[k]||0)+(k===SEL[cur]?" sel":""));});
+ if(cur==="world")[].forEach.call(document.querySelectorAll("#g [data-p]"),function(e){var p=e.getAttribute("data-p"),d=e.__data__,id=d&&String(d.id),v=(p==="US"&&S.us[id])||st[p]||0;e.setAttribute("class","c o v"+v);});
 }
 function lv(k){return S[cur][k]||0;}
 function setLv(k,v){if(v)S[cur][k]=v;else delete S[cur][k];save();if(window.LB)LB.touch();paint();panel();score();if(!mode())tiles();}
@@ -258,7 +275,32 @@ function tiles(){
 }
 /* tabs are built once; switching moves the pill and toggles sections instead of rebuilding them */
 (function(){var tb=$("tabs");tb.appendChild(el("i","pill"));tb.style.setProperty("--n",TABS.length);
- TABS.forEach(function(t){var b=el("button");b.setAttribute("data-t",t[0]);b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+TI[t[0]]+"</svg>";b.appendChild(el("span","",t[1]));b.onclick=function(){go(t[0]);};tb.appendChild(b);});})();
+ TABS.forEach(function(t){var b=el("button");b.setAttribute("data-t",t[0]);b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+TI[t[0]]+"</svg>";b.appendChild(el("span","",t[1]));b.onclick=function(){if(!tb._dragged)go(t[0]);};tb.appendChild(b);});})();
+/* bar heights feed the page padding; if a label no longer fits (large system text), the tab bar shows icons only */
+(function(){var tb=$("tabs"),top=document.querySelector(".top"),rs=document.documentElement.style;
+ function fit(){rs.setProperty("--toph",top.offsetHeight+"px");tb.classList.remove("ico");
+  var over=[].some.call(tb.querySelectorAll("span"),function(x){return x.offsetWidth&&x.scrollWidth>x.offsetWidth+1;});
+  if(over&&getComputedStyle(tb).position==="fixed")tb.classList.add("ico");rs.setProperty("--tabh",tb.offsetHeight+"px");}
+ fit();if(window.ResizeObserver)new ResizeObserver(fit).observe(top);addEventListener("resize",fit);if(document.fonts)document.fonts.ready.then(fit);})();
+/* drag a pill (tab bar and every Globe / US states / Canada switcher): it lifts and follows the finger,
+   the option under it lights up, and letting go picks that option. pick(i) is only called for a new option. */
+function pillDrag(box,pick){var pl=box.querySelector(".pill"),st=null;
+ function bs(){return box.querySelectorAll("button");}
+ function geo(){var r=box.getBoundingClientRect(),cs=getComputedStyle(box),pd=parseFloat(cs.getPropertyValue("--pd"))||3,bl=parseFloat(cs.borderLeftWidth)||0,w=pl.offsetWidth;
+  return{x0:r.left+bl+pd,inner:box.clientWidth-2*pd,w:w,step:w+(parseFloat(cs.getPropertyValue("--gp"))||2),n:bs().length};}
+ function lit(i){[].forEach.call(bs(),function(b,k){b.classList.toggle("on",k===i);});}
+ box.addEventListener("pointerdown",function(e){if(e.button||box.querySelector("button:disabled"))return;
+  st={x:e.clientX,g:geo(),id:e.pointerId,on:0,o:[].indexOf.call(bs(),box.querySelector("button.on"))};});
+ box.addEventListener("pointermove",function(e){if(!st||e.pointerId!==st.id)return;
+  if(!st.on){if(Math.abs(e.clientX-st.x)<8)return;st.on=1;try{box.setPointerCapture(e.pointerId);}catch(x){}pl.classList.add("drag");box.classList.add("held");}
+  var g=st.g,x=Math.max(0,Math.min(g.inner-g.w,e.clientX-g.x0-g.w/2)),now=performance.now(),v=st.px==null?0:(x-st.px)/Math.max(8,now-st.t);
+  st.v=(st.v||0)*.6+v*.4;st.px=x;st.t=now;st.i=Math.max(0,Math.min(g.n-1,Math.round(x/g.step)));
+  var k=Math.min(.16,Math.abs(st.v)*.1);pl.style.transform="translateX("+x+"px) scale("+(1.1+k).toFixed(3)+","+(1.16-k*.7).toFixed(3)+")";lit(st.i);});
+ function end(e){if(!st||e.pointerId!==st.id)return;var s0=st;st=null;if(!s0.on)return;
+  pl.classList.remove("drag");box.classList.remove("held");pl.style.transform="";box._dragged=1;setTimeout(function(){box._dragged=0;},0);
+  if(s0.i!==s0.o){box.style.setProperty("--i",s0.i);pick(s0.i);}else lit(s0.o);}
+ box.addEventListener("pointerup",end);box.addEventListener("pointercancel",end);}
+pillDrag($("tabs"),function(i){go(TABS[i][0]);});
 /* each tab has its own address (/globe, /usa, /canada, /leaderboard) so Back/Forward move between tabs */
 function go(t,pop){if(!pop&&t!==cur)try{history.pushState({t:t},"",PATH[t]);}catch(e){}if(t===cur)return;cur=t;render();window.scrollTo(0,0);}
 window.addEventListener("popstate",function(){var t=tabOf(location.pathname);if(t!==cur)go(t,1);});
@@ -341,7 +383,7 @@ function ukf(U){
 function splitPS(f){var g=f.geometry,ps=g.type==="Polygon"?[g.coordinates]:g.coordinates,w=[],z=[];function m2(id,n,c){return{type:"Feature",properties:{id:id,name:n},geometry:{type:"MultiPolygon",coordinates:c}};}ps.forEach(function(p){var s=0,r=p[0];r.forEach(function(q){s+=q[0];});(s/r.length<34.75?z:w).push(p);});if(!w.length||!z.length)return[f];return[m2("PS-WB","Judea & Samaria",w),m2("PS-GZ","Gaza",z)];}
 function prep(G,u){return G.features.filter(function(f){var i=f.properties.id;return !(u&&i==="GB");}).reduce(function(a,f){return a.concat(f.properties.id==="PS"?splitPS(f):[f]);},[]).concat(u||[]).map(rw);}
 function terr(G){G.features.forEach(function(f){var i=String(f.properties.id).replace(/^US-/,"");if(["PR","VI","GU","AS","MP"].indexOf(i)>=0)TF[i]=rw(f);});TFv++;}
-function mkSel(g,data){d3.select(g).selectAll("*").remove();return d3.select(g).selectAll("path").data(data).enter().append("path").attr("data-k",function(f){return TRK[f.id]?f.id:null;}).attr("class",function(f){return"c v0"+(TRK[f.id]?"":" o");});}
+function mkSel(g,data){d3.select(g).selectAll("*").remove();return d3.select(g).selectAll("path").data(data).enter().append("path").attr("data-k",function(f){return TRK[f.id]?f.id:null;}).attr("data-p",function(f){return TRK[f.id]?null:par(f.id);}).attr("class",function(f){return"c v0"+(TRK[f.id]?"":" o");});}
 function buildAm(L,U){
  var u=ukf(U),low=prep(L,u),oldNM=NM.world,hv={};UKL=u;TRK={};
  ISO.split(",").forEach(function(c){TRK[c]=1;});TRK.GL=1;TRK.AQ=1;TRK.HK=1;TRK.MO=1;if(u){delete TRK.GB;u.forEach(function(f){TRK[f.properties.id]=1;});}
@@ -457,7 +499,8 @@ var LB=(function(){
  function pfocus(i){if(!coarse)setTimeout(function(){i.focus();},0);}
  var PL={};
  function seg(sel,f,dis,key){var s=el("div","seg"),T=["world","us","ca"],i=T.indexOf(sel),o=PL[key],pl=el("i","pill");s.appendChild(pl);s.style.setProperty("--n",T.length);
-  T.forEach(function(t){s.appendChild(B(TN[t],t===sel?"on":"",function(){if(t!==sel)f(t);},dis));});
+  T.forEach(function(t){s.appendChild(B(TN[t],t===sel?"on":"",function(){if(t!==sel&&!s._dragged)f(t);},dis));});
+  pillDrag(s,function(k){PL[key]=k;f(T[k]);});
   PL[key]=i;s.style.setProperty("--i",o==null?i:o);
   if(o!=null&&o!==i)requestAnimationFrame(function(){requestAnimationFrame(function(){s.style.setProperty("--i",i);});});
   return s;}
@@ -678,6 +721,8 @@ var LB=(function(){
   if(t==="world")MKs.forEach(function(d){var v=st[d.k];if(!v)return;var q=pr([d.lon,d.lat]);if(!q)return;x.beginPath();x.arc(q[0],q[1],7,0,7);x.fillStyle=L[v];x.fill();x.strokeStyle="#eef2f7";x.lineWidth=2;x.stroke();});}
  /* ---- start: an edit link (#me=<id>.<secret>) opens the PIN popup ---- */
  $("shb").onclick=function(){share();};
+ /* share icon in the phone's own style: Android's three linked dots, Apple's box-and-arrow everywhere else */
+ if(/Android/i.test(navigator.userAgent))$("shb").querySelector("svg").innerHTML='<circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="m8.3 13.3 7.4 4.4M15.7 6.3l-7.4 4.4"/>';
  $("dlx").onclick=dclose;
  $("rkc").onclick=function(){go("board");};
  $("dlg").addEventListener("close",function(){if(D.img)URL.revokeObjectURL(D.img.url);D={};tsStop();
