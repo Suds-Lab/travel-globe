@@ -279,8 +279,8 @@ function mk(t){
 function applyT(){var T=FT[cur],g=$("fg-"+cur);if(cur==="us")$("tg").setAttribute("transform","translate("+T[0]+","+T[1]+") scale("+T[2]+")");if(g)g.setAttribute("transform","translate("+T[0]+","+T[1]+") scale("+T[2]+")");}
 /* territories and other non-country places (Puerto Rico, Gibraltar, Réunion, Greenland, Ceuta…) are their own places:
    they earn points but don't count as countries. England/Scotland/Wales/N. Ireland count as one country (the UK). Keep in sync with src/worker.js. */
-var TER={};"BV,GI,GO,JU,UM-DQ,UM-FQ,UM-HQ,UM-JQ,UM-MQ,UM-WQ,BQ,WF,VI,VG,TK,TC,SX,PM,SH,GS,EH,RE,PF,PR,PN,SJ,NU,NF,NC,YT,MQ,MS,MP,MF,MO,JE,IO,IM,HM,HK,GU,GF,GL,GP,GG,FO,FK,KY,CX,CW,CK,CC,BM,BL,TF,AQ,AS,AX,AI,AW,ES-CE,ES-ML".split(",").forEach(function(c){TER[c]=1;});
-function ck(k){k=String(k);if(TER[k])return null;if(/^GB-/.test(k))return"GB";if(/^PS-/.test(k))return"PS";return k;}
+var NOTC={};"BV,GI,GO,JU,UM-DQ,UM-FQ,UM-HQ,UM-JQ,UM-MQ,UM-WQ,BQ,WF,VI,VG,TK,TC,SX,PM,SH,GS,EH,RE,PF,PR,PN,SJ,NU,NF,NC,YT,MQ,MS,MP,MF,MO,JE,IO,IM,HM,HK,GU,GF,GL,GP,GG,FO,FK,KY,CX,CW,CK,CC,BM,BL,TF,AQ,AS,AX,AI,AW,ES-CE,ES-ML".split(",").forEach(function(c){NOTC[c]=1;});
+function ck(k){k=String(k);if(NOTC[k])return null;if(/^GB-/.test(k))return"GB";if(/^PS-/.test(k))return"PS";return k;}
 function nCountries(st,list){var o={};list.forEach(function(i){var c=ck(i.k);if(c&&(!st||st[i.k]))o[c]=1;});return Object.keys(o).length;}
 function paint(){
  if(!S[cur])return;var st=S[cur],sel=cur==="world"?"#g [data-k]":"#fg-"+cur+" [data-k]"+(cur==="us"?",#tg [data-k]":"");
@@ -389,7 +389,7 @@ if(ok){
  function qfind(v){v=norm(v);if(!v)return[];var a=[],b=[];IT.world.forEach(function(i){var n=norm(i.name),p=n.indexOf(v);if(p===0)a.push(i);else if(p>0)b.push(i);});
   var by=function(x,y){return x.name<y.name?-1:1;};return a.sort(by).concat(b.sort(by)).slice(0,8);}
  function qgo(i){var c=LL[i.k];if(!c){var f=WF.filter(function(x){return kf(x)===i.k;})[0];if(!f)return;c=d3.geo.centroid(f);}
-  r=[-c[0],Math.max(-80,Math.min(80,-c[1]))];K=Math.max(K,TER[i.k]||c===LL[i.k]?6:4);SEL.world=i.k;draw();paint();panel();$("q").value="";qlist([]);$("q").blur();}
+  r=[-c[0],Math.max(-80,Math.min(80,-c[1]))];K=Math.max(K,NOTC[i.k]||c===LL[i.k]?6:4);SEL.world=i.k;draw();paint();panel();$("q").value="";qlist([]);$("q").blur();}
  var QM=[],QA=0;
  function qlist(m){QM=m;QA=0;var l=$("ql");l.innerHTML="";l.hidden=!m.length;m.forEach(function(i,k){var b=el("button",k===QA?"on":"");b.type="button";b.setAttribute("role","option");
    b.appendChild(el("span","",i.name));var v=S.world[i.k]||0;if(v)b.appendChild(el("i","b"+v));if(!ck(i.k))b.appendChild(el("small","","territory"));
