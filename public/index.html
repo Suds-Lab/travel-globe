@@ -39,7 +39,14 @@ summary::after{content:"›";color:var(--mut);font-size:20px;transform:rotate(90
 .legend .n{text-align:right;font-weight:700}.legend .d{grid-column:1/-1;color:var(--mut);font-size:12px;margin:-6px 0 2px}
 /* search */
 #q{width:100%;padding:10px 12px 10px 36px;border:0;border-radius:999px;background:var(--card2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%238e8e93' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='7' cy='7' r='5.2'/%3E%3Cpath d='m11 11 3.5 3.5'/%3E%3C/svg%3E") 12px 50%/16px no-repeat;margin-bottom:12px;outline:none}
-#q::placeholder{color:var(--mut)}
+#q::placeholder{color:var(--mut)}#q::-webkit-search-cancel-button{display:none}
+.qw{position:relative;margin-bottom:12px}.qw #q{margin:0}
+#ql{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:30;max-height:min(50vh,360px);overflow:auto;padding:6px;border-radius:20px;background:rgba(28,29,33,.86);border:1px solid var(--edge);-webkit-backdrop-filter:blur(30px) saturate(200%);backdrop-filter:blur(30px) saturate(200%);box-shadow:0 14px 40px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.12)}
+#ql[hidden]{display:none}
+#ql button{display:flex;align-items:center;gap:8px;width:100%;padding:10px 12px;border:0;border-radius:14px;background:none;color:var(--fg);font:inherit;font-size:15px;text-align:left;cursor:pointer}
+#ql button span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#ql button small{color:var(--mut);font-size:12px}
+#ql button i{width:10px;height:10px;border-radius:50%;background:var(--c);flex:none}
+#ql button.on,#ql button:hover{background:rgba(255,255,255,.1)}
 /* maps */
 #mw{position:relative;background:var(--card);border-radius:var(--r);overflow:hidden;margin-bottom:12px}
 #g,#f{width:100%;display:block;touch-action:none;cursor:grab;background:radial-gradient(circle at 50% 45%,#121418,#050607 70%)}
@@ -48,6 +55,7 @@ summary::after{content:"›";color:var(--mut);font-size:20px;transform:rotate(90
 .zb button{width:38px;height:38px;border:0;background:rgba(44,44,48,.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:50%;font-size:20px;cursor:pointer}
 .c{stroke:#0b0c0e;stroke-width:.5;vector-effect:non-scaling-stroke;cursor:pointer}.c.sel{stroke:#fff;stroke-width:2}
 .o{cursor:default}#g .c{vector-effect:none}.tb{fill:var(--l0);stroke:var(--bd);stroke-width:.5}.v0{fill:var(--land)}.v1{fill:var(--l1)}.v2{fill:var(--l2)}.v3{fill:var(--l3)}.v4{fill:var(--l4)}.v5{fill:var(--l5)}
+#g [data-k="AQ"]{stroke:none}/* its outline runs along the date line to the pole and shows as a seam */
 #sea{fill:#0b0d11;stroke:#1d2026}#grat{fill:none;stroke:#1d2026;stroke-width:.4}
 /* level colors as a variable */
 .b0{--c:var(--mut)}.b1{--c:var(--l1)}.b2{--c:var(--l2)}.b3{--c:var(--l3)}.b4{--c:var(--l4)}.b5{--c:var(--l5)}
@@ -180,10 +188,18 @@ body{padding-top:calc(var(--toph,calc(env(safe-area-inset-top,0px) + 64px)) + 10
  .tabs{--pd:4px}
  #mw{margin-inline:-12px;border-radius:0;border-left:0;border-right:0}
  #g{max-height:none}
- .zb button{width:44px;height:44px}
  #panel{position:sticky;bottom:calc(var(--tabh,56px) + env(safe-area-inset-bottom,0px) + 18px);z-index:4;background-color:rgba(24,25,29,.62)}
- .stats b{font-size:26px}.stats>div,.stats>button{padding:0 10px}
- .lv button{min-height:52px}
+ .stats{padding:10px 2px;margin-bottom:10px}.stats b{font-size:22px}.stats b i{font-size:12px}.stats small{font-size:10px}.stats>div,.stats>button{padding:0 9px}#rkc b.j{font-size:17px}
+ .lv button{min-height:42px;padding:5px 0 4px;font-size:15px}.lv button::before{width:7px;height:7px;margin-bottom:3px}
+ /* compact phone sizing so everything fits, including on small iPhones */
+ body{font-size:14px}
+ .top h1{font-size:18px}.top .ib{width:34px;height:34px}.top .ib svg{width:18px;height:18px}
+ details#key{padding:10px 12px;margin-bottom:10px}.qw{margin-bottom:10px}#q{padding:8px 12px 8px 34px}
+ #panel{padding:11px 12px;min-height:58px}#panel h2{font-size:18px;margin-bottom:8px}.lb.st{font-size:14px;margin-top:8px}.lb,.ds{font-size:12px}
+ .zb button{width:38px;height:38px}
+ #dlg h2{font-size:20px}.ui button,.ui input{padding:9px 13px}.ui button.ic{width:38px;height:38px}
+ .ui .pad button{padding:10px 0;font-size:20px}
+ #lb .av{width:38px;height:38px}#lb .you{padding:11px 12px}#lb li .rk{width:28px;height:28px}
  #toast{bottom:calc(var(--tabh,56px) + env(safe-area-inset-bottom,0px) + 24px)}
  .h{display:none}
 }
@@ -191,10 +207,10 @@ body{padding-top:calc(var(--toph,calc(env(safe-area-inset-top,0px) + 64px)) + 10
 <header class="top"><h1>Travel Globe</h1><button id="shb" class="ib" aria-label="Share your travel passport" title="Share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5"/><path d="M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg></button></header>
 <div class="tabs" id="tabs"></div>
 <section id="lb" class="ui" style="display:none"><div id="lbc"></div></section>
-<div class="stats" id="scr"><div><small>Points</small><b id="pts"></b></div><div><small>Places</small><b id="sub"></b></div><button id="rkc" type="button"><small>Rank</small><b>–</b></button></div>
+<div class="stats" id="scr"><div><small>Points</small><b id="pts"></b></div><div><small id="subl">Places</small><b id="sub"></b></div><button id="rkc" type="button"><small>Rank</small><b>–</b></button></div>
 <dialog id="dlg" class="ui"><button id="dlx" type="button" aria-label="Close">✕</button><div id="dlc"></div><div id="tsb"></div></dialog><div id="toast" role="status" aria-live="polite"></div>
 <details id="key"><summary>Breakdown</summary><div class="legend" id="legend"></div></details>
-<input id="q" list="dl" placeholder="Search a country…" autocomplete="off"><datalist id="dl"></datalist>
+<div class="qw"><input id="q" type="search" placeholder="Search a place…" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" aria-controls="ql"><div id="ql" role="listbox" hidden></div></div>
 <div id="mw">
 <svg id="g" viewBox="0 0 400 400"><circle id="sea" cx="200" cy="200"/><path id="grat"/><g id="cs"></g><g id="ch" style="display:none"></g><g id="cm" style="display:none"></g><g id="ms"></g></svg>
 <svg id="f" viewBox="0 0 400 300"><g id="fg-us"></g><g id="fg-ca"></g><g id="tg"></g></svg>
@@ -237,7 +253,6 @@ if(ok){
  sea=d3.select("#sea");grat=d3.select("#grat").datum(d3.geo.graticule()());
  cs=d3.select("#cs").selectAll("path").data(WF).enter().append("path").attr("data-k",kf);
  ms=d3.select("#ms").selectAll("path").data(MKs).enter().append("path").attr("data-k",function(d){return d.k;});
- IT.world.sort(function(a,b){return a.name<b.name?-1:1;}).forEach(function(i){var o=el("option");o.value=i.name;$("dl").appendChild(o);});
 }
 function hz(k){var x=k.charCodeAt(0)+k.charCodeAt(2),h=[];for(var i=0;i<12;i++){x=(x*37+11)%97;h.push(.75+x/97*.5);}return h;}
 function draw(){
@@ -261,16 +276,15 @@ function mk(t){
  fit(f,pr,t==="us"?232:300);f.forEach(function(x){add(t,kf(x),nm(x));});if(t==="us")TER.forEach(function(x){if(!NM.us[x[0]])add("us",x[0],x[1]);});
  return FL[t]={f:f,p:d3.geo.path().projection(pr)};
 }
-function applyT(){var T=FT[cur],g=$("fg-"+cur);if(g)g.setAttribute("transform","translate("+T[0]+","+T[1]+") scale("+T[2]+")");}
-/* overseas territories aren't separate countries on the globe; they show their country's colour
-   (US territories use their own level from the US tab when it's set) */
-var PAR={US:"PR,VI,GU,AS,MP",FR:"GF,GP,RE,MQ,YT,PF,NC,PM,WF,MF,BL,GO,JU,TF",GB:"GI,GS,TC,VG,MS,SH,PN,IO,BM,KY,AI,FK,JE,GG,IM",NL:"SX,BQ,AW,CW",NO:"SJ,BV",AU:"NF,HM,CC,CX",NZ:"TK,NU,CK",DK:"FO",FI:"AX"},PARK={};
-for(var pc in PAR)PAR[pc].split(",").forEach(function(c){PARK[c]=pc;});
-function par(id){id=String(id);var p=/^UM-/.test(id)?"US":PARK[id];if(p==="GB"&&!TRK.GB)p="GB-ENG";return p&&TRK[p]?p:null;}
+function applyT(){var T=FT[cur],g=$("fg-"+cur);if(cur==="us")$("tg").setAttribute("transform","translate("+T[0]+","+T[1]+") scale("+T[2]+")");if(g)g.setAttribute("transform","translate("+T[0]+","+T[1]+") scale("+T[2]+")");}
+/* territories and other non-country places (Puerto Rico, Gibraltar, Réunion, Greenland, Ceuta…) are their own places:
+   they earn points but don't count as countries. England/Scotland/Wales/N. Ireland count as one country (the UK). Keep in sync with src/worker.js. */
+var TER={};"BV,GI,GO,JU,UM-DQ,UM-FQ,UM-HQ,UM-JQ,UM-MQ,UM-WQ,BQ,WF,VI,VG,TK,TC,SX,PM,SH,GS,EH,RE,PF,PR,PN,SJ,NU,NF,NC,YT,MQ,MS,MP,MF,MO,JE,IO,IM,HM,HK,GU,GF,GL,GP,GG,FO,FK,KY,CX,CW,CK,CC,BM,BL,TF,AQ,AS,AX,AI,AW,ES-CE,ES-ML".split(",").forEach(function(c){TER[c]=1;});
+function ck(k){k=String(k);if(TER[k])return null;if(/^GB-/.test(k))return"GB";if(/^PS-/.test(k))return"PS";return k;}
+function nCountries(st,list){var o={};list.forEach(function(i){var c=ck(i.k);if(c&&(!st||st[i.k]))o[c]=1;});return Object.keys(o).length;}
 function paint(){
  if(!S[cur])return;var st=S[cur],sel=cur==="world"?"#g [data-k]":"#fg-"+cur+" [data-k]"+(cur==="us"?",#tg [data-k]":"");
  [].forEach.call(document.querySelectorAll(sel),function(e){var k=e.getAttribute("data-k");e.setAttribute("class","c v"+(st[k]||0)+(k===SEL[cur]?" sel":""));});
- if(cur==="world")[].forEach.call(document.querySelectorAll("#g [data-p]"),function(e){var p=e.getAttribute("data-p"),d=e.__data__,id=d&&String(d.id),v=(p==="US"&&S.us[id])||st[p]||0;e.setAttribute("class","c o v"+v);});
 }
 function lv(k){return S[cur][k]||0;}
 function setLv(k,v){if(v)S[cur][k]=v;else delete S[cur][k];save();if(window.LB)LB.touch();paint();panel();score();if(!mode())tiles();}
@@ -284,8 +298,9 @@ function panel(){
  p.appendChild(row);p.appendChild(el("div","lb st b"+v0,LV[v0]+(v0?" · "+v0+(v0===1?" pt":" pts"):"")));if(DS[v0])p.appendChild(el("div","ds",DS[v0]));
 }
 function score(){
- if(!S[cur])return;var L=IT[cur],t=0,n=0;L.forEach(function(i){var v=S[cur][i.k]||0;t+=v;if(v)n++;});
- $("pts").textContent=t;var sb=$("sub");sb.textContent=n;sb.appendChild(el("i","","/"+L.length));if(window.LB)LB.chip();legend();
+ if(!S[cur])return;var L=IT[cur],t=0,n=0,tot=L.length;L.forEach(function(i){var v=S[cur][i.k]||0;t+=v;if(v)n++;});
+ if(cur==="world"){n=nCountries(S.world,L);tot=nCountries(null,L);}$("subl").textContent=cur==="world"?"Countries":"Places";
+ $("pts").textContent=t;var sb=$("sub");sb.textContent=n;sb.appendChild(el("i","","/"+tot));if(window.LB)LB.chip();legend();
 }
 function tiles(){
  if(!S[cur])return;var g=$("grid");g.innerHTML="";
@@ -325,13 +340,13 @@ window.addEventListener("popstate",function(){var t=tabOf(location.pathname);if(
 function render(){
  var tb=$("tabs");TABS.forEach(function(t,i){var b=tb.querySelector('[data-t="'+t[0]+'"]'),on=t[0]===cur;b.className=on?"on":"";if(on){b.setAttribute("aria-current","page");tb.style.setProperty("--i",i);}else b.removeAttribute("aria-current");});
  var B=cur==="board";["scr","key","mw","panel","hint","foot"].forEach(function(i){$(i).style.display=B?"none":"";});$("lb").style.display=B?"":"none";
- if(B){$("q").style.display="none";$("grid").style.display="none";if(window.LB)LB.show();return;}
+ if(B){$("q").parentNode.style.display="none";$("grid").style.display="none";if(window.LB)LB.show();return;}
  var w=cur==="world";
- if(!ok){$("mw").innerHTML="<p>The map data could not load. Check your connection and reload.</p>";$("q").style.display="none";return;}
+ if(!ok){$("mw").innerHTML="<p>The map data could not load. Check your connection and reload.</p>";$("q").parentNode.style.display="none";return;}
  if(cur==="ca"&&!FL.ca&&CS===0){CS=1;loadCA(function(){CS=2;if(cur==="ca")render();});}
  if(!w&&!FL[cur]&&!(cur==="ca"&&CS===1)){var m=mk(cur);if(!m&&cur==="ca"&&!IT.ca.length)CA.forEach(function(n){add("ca",n,n);});}
  var flat=!w&&!!FL[cur];
- $("g").style.display=w?"":"none";$("f").style.display=flat?"":"none";$("q").style.display=w?"":"none";
+ $("g").style.display=w?"":"none";$("f").style.display=flat?"":"none";$("q").parentNode.style.display=w?"":"none";
  document.querySelector(".zb").style.display=(w||flat)?"":"none";$("grid").style.display=(w||flat)?"none":"";
  $("hint").textContent=w?"Drag to spin, pinch or scroll to zoom, tap a country to color it. Tiny countries appear when you zoom in close.":flat?"Drag to pan, pinch or scroll to zoom, tap a place to color it.":CS===1?"Loading the Canada map…":"Map not available here, so tap a tile to set its level.";
  $("fg-us").style.display=flat&&cur==="us"?"":"none";$("fg-ca").style.display=flat&&cur==="ca"?"":"none";$("tg").style.display=flat&&cur==="us"?"":"none";
@@ -370,11 +385,21 @@ function legend(){var lg=$("legend"),c=[0,0,0,0,0,0],mx=1;lg.innerHTML="";IT[cur
 if(ok){
  gesture($("g"),function(dx,dy,w){var f=57.3/(R*K*(w/400));r=[r[0]+dx*f,Math.max(-90,Math.min(90,r[1]-dy*f))];req();},tap);
  gesture($("f"),function(dx,dy,w){var T=FT[cur],s=400/w;T[0]+=dx*s;T[1]+=dy*s;applyT();},tap);
- $("q").onchange=function(){
-  var v=this.value.trim().toLowerCase(),i=IT.world.filter(function(x){return x.name.toLowerCase()===v;})[0];if(!i)return;
-  var c=LL[i.k];if(!c){var f=WF.filter(function(x){return kf(x)===i.k;})[0];c=d3.geo.centroid(f);}
-  r=[-c[0],Math.max(-80,Math.min(80,-c[1]))];K=Math.max(K,4);SEL.world=i.k;draw();paint();panel();this.blur();
- };
+ /* search: type part of a name, pick from the list under the box (works the same on iPhone) */
+ function qfind(v){v=norm(v);if(!v)return[];var a=[],b=[];IT.world.forEach(function(i){var n=norm(i.name),p=n.indexOf(v);if(p===0)a.push(i);else if(p>0)b.push(i);});
+  var by=function(x,y){return x.name<y.name?-1:1;};return a.sort(by).concat(b.sort(by)).slice(0,8);}
+ function qgo(i){var c=LL[i.k];if(!c){var f=WF.filter(function(x){return kf(x)===i.k;})[0];if(!f)return;c=d3.geo.centroid(f);}
+  r=[-c[0],Math.max(-80,Math.min(80,-c[1]))];K=Math.max(K,TER[i.k]||c===LL[i.k]?6:4);SEL.world=i.k;draw();paint();panel();$("q").value="";qlist([]);$("q").blur();}
+ var QM=[],QA=0;
+ function qlist(m){QM=m;QA=0;var l=$("ql");l.innerHTML="";l.hidden=!m.length;m.forEach(function(i,k){var b=el("button",k===QA?"on":"");b.type="button";b.setAttribute("role","option");
+   b.appendChild(el("span","",i.name));var v=S.world[i.k]||0;if(v)b.appendChild(el("i","b"+v));if(!ck(i.k))b.appendChild(el("small","","territory"));
+   b.onpointerdown=function(e){e.preventDefault();};b.onclick=function(){qgo(i);};l.appendChild(b);});}
+ $("q").oninput=function(){qlist(qfind(this.value));};
+ $("q").onfocus=function(){if(this.value)qlist(qfind(this.value));};
+ $("q").onblur=function(){setTimeout(function(){qlist([]);},120);};
+ $("q").onkeydown=function(e){if(!QM.length)return;var l=$("ql").children;
+  if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();l[QA].className="";QA=(QA+(e.key==="ArrowDown"?1:QM.length-1))%QM.length;l[QA].className="on";}
+  else if(e.key==="Enter"){e.preventDefault();qgo(QM[QA]);}else if(e.key==="Escape"){qlist([]);}};
  draw();
 }
 var HI=false,csH=null,csM=null,TRK={},UKL=null,DRAG=false,rq=0,idT=0;
@@ -401,19 +426,21 @@ function ukf(U){
 function splitPS(f){var g=f.geometry,ps=g.type==="Polygon"?[g.coordinates]:g.coordinates,w=[],z=[];function m2(id,n,c){return{type:"Feature",properties:{id:id,name:n},geometry:{type:"MultiPolygon",coordinates:c}};}ps.forEach(function(p){var s=0,r=p[0];r.forEach(function(q){s+=q[0];});(s/r.length<34.75?z:w).push(p);});if(!w.length||!z.length)return[f];return[m2("PS-WB","Judea & Samaria",w),m2("PS-GZ","Gaza",z)];}
 function prep(G,u){return G.features.filter(function(f){var i=f.properties.id;return !(u&&i==="GB");}).reduce(function(a,f){return a.concat(f.properties.id==="PS"?splitPS(f):[f]);},[]).concat(u||[]).map(rw);}
 function terr(G){G.features.forEach(function(f){var i=String(f.properties.id).replace(/^US-/,"");if(["PR","VI","GU","AS","MP"].indexOf(i)>=0)TF[i]=rw(f);});TFv++;}
-function mkSel(g,data){d3.select(g).selectAll("*").remove();return d3.select(g).selectAll("path").data(data).enter().append("path").attr("data-k",function(f){return TRK[f.id]?f.id:null;}).attr("data-p",function(f){return TRK[f.id]?null:par(f.id);}).attr("class",function(f){return"c v0"+(TRK[f.id]?"":" o");});}
+function mkSel(g,data){d3.select(g).selectAll("*").remove();return d3.select(g).selectAll("path").data(data).enter().append("path").attr("data-k",function(f){return TRK[f.id]?f.id:null;}).attr("class",function(f){return"c v0"+(TRK[f.id]?"":" o");});}
 function buildAm(L,U){
  var u=ukf(U),low=prep(L,u),oldNM=NM.world,hv={};UKL=u;TRK={};
  ISO.split(",").forEach(function(c){TRK[c]=1;});TRK.GL=1;TRK.AQ=1;TRK.HK=1;TRK.MO=1;if(u){delete TRK.GB;u.forEach(function(f){TRK[f.properties.id]=1;});}
+ low.forEach(function(f){TRK[f.id]=1;});/* every place on the map is editable, territories included */
  low.forEach(function(f){hv[f.id]=1;});if(hv["PS-WB"]){delete TRK.PS;TRK["PS-WB"]=1;TRK["PS-GZ"]=1;}IT.world=[];NM.world={};
  WF=low.filter(function(f){return TRK[f.id];});WF.forEach(function(f){add("world",f.id,f.properties.name);});
  MKs=[];var m2={};I2.split(",").forEach(function(s){var a=s.split(":");m2[a[0]]=a[1];});
  MK.split(";").forEach(function(s){var a=s.split(","),k=m2[a[0]];if(k&&!hv[k]){MKs.push({k:k,name:a[1],lat:+a[2],lon:+a[3],rad:({LUX:.45,BRN:.6,TLS:.7,SWZ:.8,CPV:.5,MDV:.5,MUS:.4})[a[0]]||.35,h:hz(a[0])});add("world",k,a[1]);LL[k]=[+a[3],+a[2]];}});
+ /* tiny places without an outline (or too small to tap) get a dot too */
+ [["ES-CE","Ceuta",35.89,-5.32,.12],["ES-ML","Melilla",35.29,-2.94,.12],["GI","Gibraltar",36.14,-5.35,.1]].forEach(function(a){MKs.push({k:a[0],name:a[1],lat:a[2],lon:a[3],rad:a[4],h:hz(a[0])});if(!NM.world[a[0]])add("world",a[0],a[1]);LL[a[0]]=[a[3],a[2]];});
  var nbn={},nw={};IT.world.forEach(function(i){nbn[norm(i.name)]=i.k;});
  for(var k in S.world){if(NM.world[k])nw[k]=S.world[k];else{var n=nbn[norm(oldNM[k]||"")];if(n)nw[n]=S.world[k];}}S.world=nw;save();
  cs=mkSel("#cs",low);d3.select("#ms").selectAll("*").remove();
  ms=d3.select("#ms").selectAll("path").data(MKs).enter().append("path").attr("data-k",function(d){return d.k;}).attr("class","c v0");
- $("dl").innerHTML="";IT.world.sort(function(a,b){return a.name<b.name?-1:1;}).forEach(function(i){var o=el("option");o.value=i.name;$("dl").appendChild(o);});
  SEL.world=null;draw();paint();panel();score();if(cur==="us")render();
 }
 function simp(f){
@@ -648,7 +675,7 @@ var LB=(function(){
   if(my){rows=rows.filter(function(r){return r.tag!==ME.tag;});tot=my.total;
    if(my.pts>0){var me={name:ME.name,tag:ME.tag,p:my.pts,n:my.n},at=0;while(at<rows.length&&(rows[at].p>me.p||rows[at].p===me.p&&rows[at].n>=me.n))at++;if(at<rows.length||rows.length<100)rows.splice(at,0,me);}}
   if(!rows.length){c.appendChild(el("p","mu ctr","Nobody is on the "+TN[bt]+" board yet."));return;}
-  var ol=el("ol"),rank=0,prev=null,mine=0,li=function(k,nm,p,n,me){var x=el("li",me?"me":""),m=el("span","nm"),sc=el("span","sc");x.appendChild(el("span","rk"+(k<=3?" t3":""),k));m.appendChild(el("b","",nm+(me?" (you)":"")));m.appendChild(el("small","",n+(n===1?" place":" places")));x.appendChild(m);sc.appendChild(el("b","",p));sc.appendChild(el("small",""," pts"));x.appendChild(sc);return x;};
+  var ol=el("ol"),rank=0,prev=null,mine=0,li=function(k,nm,p,n,me){var x=el("li",me?"me":""),m=el("span","nm"),sc=el("span","sc");x.appendChild(el("span","rk"+(k<=3?" t3":""),k));m.appendChild(el("b","",nm+(me?" (you)":"")));m.appendChild(el("small","",n+(bt==="world"?(n===1?" country":" countries"):(n===1?" place":" places"))));x.appendChild(m);sc.appendChild(el("b","",p));sc.appendChild(el("small",""," pts"));x.appendChild(sc);return x;};
   rows.forEach(function(r,i){if(r.p!==prev){rank=i+1;prev=r.p;}var m=!!ME&&r.tag===ME.tag;if(m)mine=1;ol.appendChild(li(rank,r.name,r.p,r.n,m));});
   if(ME&&!mine&&my&&my.rank){ol.appendChild(el("li","gap","⋯"));ol.appendChild(li(my.rank,ME.name,my.pts,my.n,1));}
   c.appendChild(ol);c.appendChild(el("p","ft",tot+(tot===1?" traveler":" travelers")+" · points · places visited"));}
@@ -667,10 +694,11 @@ var LB=(function(){
  var PT={world:{ed:"WORLD EDITION",a:"COUNTRIES",b:"CONTINENTS",bt:7,pc:"OF THE WORLD",mz:"WLD"},us:{ed:"UNITED STATES EDITION",a:"STATES",b:"REGIONS",bt:4,pc:"OF THE US",mz:"USA"},ca:{ed:"CANADA EDITION",a:"PROVINCES",b:"REGIONS",bt:5,pc:"OF CANADA",mz:"CAN"}};
  function pcode(t,k){k=String(k);return t==="ca"?(CAN[k]||k.replace(/^CA-/,"")):k.replace(/^US-/,"");}
  function stats(t,r){var st=S[t],known=IT[t].length?IT[t]:Object.keys(st).map(function(k){return{k:k,name:k};}),vis=[],grp={},pts=0;
-  known.forEach(function(i){var v=st[i.k]||0;if(!v)return;pts+=v;vis.push({k:i.k,v:v,name:i.name});var g=t==="world"?CONT[i.k]:t==="us"?USR[pcode(t,i.k)]:CAR[pcode(t,i.k)];if(g)grp[g]=1;});
+  known.forEach(function(i){var v=st[i.k]||0;if(!v)return;pts+=v;vis.push({k:i.k,v:v,name:i.name});var g=t==="world"?CONT[ck(i.k)||""]||CONT[i.k]:t==="us"?USR[pcode(t,i.k)]:CAR[pcode(t,i.k)];if(g)grp[g]=1;});
   vis.sort(function(a,b){return b.v-a.v||(a.name<b.name?-1:1);});
-  var tot=IT[t].length||({world:205,us:56,ca:13})[t];
-  return{vis:vis,n:vis.length,tot:tot,g:Object.keys(grp).length,pct:Math.round(100*vis.length/tot),pts:r&&r.pts!=null?r.pts:pts,rank:r&&r.rank,total:r&&r.total};}
+  var tot=IT[t].length||({world:205,us:56,ca:13})[t],n=vis.length;
+  if(t==="world"&&IT.world.length){n=nCountries(st,IT.world);tot=nCountries(null,IT.world);}
+  return{vis:vis,n:n,tot:tot,g:Object.keys(grp).length,pct:Math.round(100*n/tot),pts:r&&r.pts!=null?r.pts:pts,rank:r&&r.rank,total:r&&r.total};}
 /* state & province flags on Wikimedia Commons ("hash/Name" -> Flag_of_Name.svg); fetched as 250px PNG thumbnails, which allow canvas use */
  var SFL={us:"AL:5/5c/Alabama;AK:e/e6/Alaska;AZ:9/9d/Arizona;AR:9/9d/Arkansas;CA:0/01/California;CO:4/46/Colorado;CT:9/96/Connecticut;DE:c/c6/Delaware;FL:f/f7/Florida;GA:0/08/the_State_of_Georgia;HI:e/ef/Hawaii;ID:a/a4/Idaho;IL:0/01/Illinois;IN:a/ac/Indiana;IA:a/aa/Iowa;KS:d/da/Kansas;KY:8/8d/Kentucky;LA:e/e0/Louisiana;ME:3/35/Maine;MD:a/a0/Maryland;MA:f/f2/Massachusetts;MI:b/b5/Michigan;MN:b/b9/Minnesota;MS:4/42/Mississippi;MO:5/5a/Missouri;MT:c/cb/Montana;NE:4/4d/Nebraska;NV:f/f1/Nevada;NH:2/28/New_Hampshire;NJ:9/92/New_Jersey;NM:c/c3/New_Mexico;NY:1/1a/New_York;NC:b/bb/North_Carolina;ND:e/ee/North_Dakota;OH:4/4c/Ohio;OK:6/6e/Oklahoma;OR:b/b9/Oregon;PA:f/f7/Pennsylvania;RI:f/f3/Rhode_Island;SC:6/69/South_Carolina;SD:1/1a/South_Dakota;TN:9/9e/Tennessee;TX:f/f7/Texas;UT:f/f6/Utah;VT:4/49/Vermont;VA:4/47/Virginia;WA:5/54/Washington;WV:2/22/West_Virginia;WI:2/22/Wisconsin;WY:b/bc/Wyoming;DC:0/03/Washington%2C_D.C;PR:2/28/Puerto_Rico;VI:f/f8/the_United_States_Virgin_Islands;GU:0/07/Guam;AS:8/87/American_Samoa;MP:e/e0/the_Northern_Mariana_Islands",ca:"AB:f/f5/Alberta;BC:b/b8/British_Columbia;MB:c/c4/Manitoba;NB:f/fb/New_Brunswick;NL:d/dd/Newfoundland_and_Labrador;NS:c/c0/Nova_Scotia;ON:8/88/Ontario;PE:d/d7/Prince_Edward_Island;QC:5/5f/Quebec;SK:b/bb/Saskatchewan;NT:c/c1/the_Northwest_Territories;NU:9/90/Nunavut;YT:6/69/Yukon"};
  var SFM={};["us","ca"].forEach(function(t){SFM[t]={};SFL[t].split(";").forEach(function(e){var i=e.indexOf(":");SFM[t][e.slice(0,i)]=e.slice(i+1);});});
@@ -680,14 +708,15 @@ var LB=(function(){
   return Promise.race([FLC[u],wait(4000).then(function(){return null;})]);}
  /* flag rows: as many rows as needed (no "+N"), each centered; fewer, larger flags per row when possible */
  function flayout(n){var r=1,per,step;for(;r<=8;r++){per=Math.ceil(n/r);step=Math.min(46,860/Math.max(per,1));if(step>=40||r===8)break;}var R=Math.min(31,step*.68);return{r:r,per:per,step:step,R:R,h:n?r*2*R+(r-1)*10:40};}
- function fcode(k){return/^PS-/.test(k)?"ps":String(k).toLowerCase();}
+ /* flag file for a place: the UK nations all use the UK flag; places without their own flag use their country's */
+ function fcode(k){k=String(k);return/^GB-/.test(k)?"gb":/^PS-/.test(k)?"ps":/^UM-/.test(k)?"um":/^ES-/.test(k)?"es":k==="GO"||k==="JU"?"tf":k.toLowerCase();}
  /* round flags from the flag-icons package; size is added to the SVG so every browser can draw it onto the canvas */
  function flagImg(code){if(!FLC[code])FLC[code]=fetch("https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/flags/1x1/"+code+".svg").then(function(r){if(!r.ok)throw 0;return r.text();})
   .then(function(s){var u=URL.createObjectURL(new Blob([s.replace("<svg ",'<svg width="512" height="512" ')],{type:"image/svg+xml"}));
    return new Promise(function(res,rej){var im=new Image();im.onload=function(){res(im);};im.onerror=rej;im.src=u;});}).catch(function(){return null;});
   return Promise.race([FLC[code],wait(3000).then(function(){return null;})]);}
  function card(t,name,r){if(t!=="world")try{mk(t);}catch(e){}
-  var s=stats(t,r),show=s.vis;
+  var s=stats(t,r),show=s.vis;if(t==="world"){var seen={};show=show.filter(function(v){var f=fcode(v.k);if(seen[f])return false;return seen[f]=1;});}
   return Promise.all(show.map(function(v){return t==="world"?flagImg(fcode(v.k)):sflag(t,v.k);})).then(function(imgs){
   var W=1080,H=1920,c=document.createElement("canvas");c.width=W;c.height=H;var x=c.getContext("2d");
   var F="system-ui,-apple-system,'Segoe UI',Roboto,sans-serif",MO="ui-monospace,'SF Mono',Menlo,Consolas,monospace",GOLD="#e9c46a",TXT="#eef2f7",SOFT="rgba(238,242,247,.62)";

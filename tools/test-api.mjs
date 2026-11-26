@@ -89,6 +89,11 @@ const save = env.ALLOW_NO_TURNSTILE; delete env.ALLOW_NO_TURNSTILE;
 r = await api("POST", "/api/join", {}); ok(r.s === 503, "join refused without turnstile secret", r);
 env.ALLOW_NO_TURNSTILE = save;
 r = await api("GET", "/api/nope"); ok(r.s === 404, "404", r);
+// territories earn points but aren't countries; the UK nations count as one country
+{ const d = { world: { "GB-ENG": 2, "GB-SCT": 1, PR: 3, GI: 1, FR: 2, "ES-CE": 1 } };
+  const j = await api("POST", "/api/join", { ts: "", data: d });
+  const row = (await q({ sql: "SELECT w_pts, w_n FROM entries WHERE id = ?", params: [j.j.id] })).results[0];
+  ok(row && row.w_pts === 10 && row.w_n === 2, "territories score but don't count as countries", row); }
 // tab addresses serve the page itself (index at "/")
 { const seen = []; const prev = env.ASSETS; env.ASSETS = { fetch: async (rq) => { seen.push(new URL(rq.url).pathname); return new Response("page"); } };
   for (const p of ["/usa", "/leaderboard/", "/favicon.svg"]) await W.fetch(new Request("https://t.example" + p), env, ctx);

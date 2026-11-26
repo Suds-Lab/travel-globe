@@ -9,7 +9,11 @@
 // so a leaked database can't be used to brute-force PINs.
 
 const TABS = { world: "w", us: "us", ca: "ca" };
-const CAP = { world: 260, us: 60, ca: 13 }; // max places per tab (a bit above the real counts)
+const CAP = { world: 340, us: 60, ca: 13 }; // max places per tab (a bit above the real counts)
+// Globe places that are not countries (territories etc.): they earn points but don't count toward "countries".
+// England/Scotland/Wales/N. Ireland count as one country (GB). Keep in sync with public/index.html.
+const TERRITORIES = new Set("BV,GI,GO,JU,UM-DQ,UM-FQ,UM-HQ,UM-JQ,UM-MQ,UM-WQ,BQ,WF,VI,VG,TK,TC,SX,PM,SH,GS,EH,RE,PF,PR,PN,SJ,NU,NF,NC,YT,MQ,MS,MP,MF,MO,JE,IO,IM,HM,HK,GU,GF,GL,GP,GG,FO,FK,KY,CX,CW,CK,CC,BM,BL,TF,AQ,AS,AX,AI,AW,ES-CE,ES-ML".split(","));
+const countryOf = (k) => (TERRITORIES.has(k) ? null : /^GB-/.test(k) ? "GB" : /^PS-/.test(k) ? "PS" : k);
 const KEY = /^[A-Za-z0-9][A-Za-z0-9 .'-]{0,39}$/;
 const MAX_BODY = 32 * 1024;
 const BOARD_SIZE = 100;
@@ -262,13 +266,16 @@ function parseData(d) {
     if (typeof src !== "object" || Array.isArray(src)) throw new HttpError(400, "Bad map data.");
     const o = {};
     let p = 0, n = 0;
+    const countries = new Set();
     for (const [k, v] of Object.entries(src)) {
       if (!KEY.test(k) || !Number.isInteger(v) || v < 0 || v > 5) throw new HttpError(400, "Bad map data.");
       if (!v) continue;
       o[k] = v; p += v; n++;
+      const c = countryOf(k); if (c) countries.add(c);
     }
     if (n > CAP[t]) throw new HttpError(400, "Too many places.");
-    clean[t] = o; out[col + "_pts"] = p; out[col + "_n"] = n;
+    // the Globe board counts countries; US and Canada count places
+    clean[t] = o; out[col + "_pts"] = p; out[col + "_n"] = t === "world" ? countries.size : n;
   }
   out.json = JSON.stringify(clean);
   return out;
