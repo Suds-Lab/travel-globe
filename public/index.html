@@ -232,7 +232,10 @@ var TI={world:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8
 var TABS=[["world","Globe"],["us","US states"],["ca","Canada"],["board","Leaderboard"]];
 var S={world:{},us:{},ca:{}},SEL={},IT={world:[],us:[],ca:[]},NM={world:{},us:{},ca:{}},LL={},FL={},FT={us:[0,0,1],ca:[0,0,1]};
 var PATH={world:"/globe",us:"/usa",ca:"/canada",board:"/leaderboard"};
-function tabOf(pn){for(var t in PATH)if(pn.replace(/\/+$/,"")===PATH[t])return t;return"world";}
+var SLUG={world:"globe",us:"usa",ca:"canada"},UNSLUG={globe:"world",usa:"us",canada:"ca"};
+function tabOf(pn){pn=pn.replace(/\/+$/,"");if(/^\/leaderboard(\/(globe|usa|canada))?$/.test(pn))return"board";for(var t in PATH)if(pn===PATH[t])return t;return"world";}
+/* which board /leaderboard/globe|usa|canada shows */
+function boardOf(pn){var m=/^\/leaderboard\/(globe|usa|canada)\/?$/.exec(pn);return m?UNSLUG[m[1]]:null;}
 var cur=tabOf(location.pathname),r=[-10,-25],K=1,R=180;
 try{var raw=localStorage.getItem("tg3");if(raw){var p=JSON.parse(raw);if(p&&typeof p==="object")for(var k in S)if(p[k]&&typeof p[k]==="object")S[k]=p[k];}}catch(e){}
 function save(){try{localStorage.setItem("tg3",JSON.stringify(S));}catch(e){}}
@@ -280,7 +283,7 @@ function applyT(){var T=FT[cur],g=$("fg-"+cur);if(cur==="us")$("tg").setAttribut
 /* territories and other non-country places (Puerto Rico, Gibraltar, Réunion, Greenland, Ceuta…) are their own places:
    they earn points but don't count as countries. England/Scotland/Wales/N. Ireland count as one country (the UK). Keep in sync with src/worker.js. */
 var NOTC={};"BV,GI,GO,JU,UM-DQ,UM-FQ,UM-HQ,UM-JQ,UM-MQ,UM-WQ,BQ,WF,VI,VG,TK,TC,SX,PM,SH,GS,EH,RE,PF,PR,PN,SJ,NU,NF,NC,YT,MQ,MS,MP,MF,MO,JE,IO,IM,HM,HK,GU,GF,GL,GP,GG,FO,FK,KY,CX,CW,CK,CC,BM,BL,TF,AQ,AS,AX,AI,AW,ES-CE,ES-ML".split(",").forEach(function(c){NOTC[c]=1;});
-function ck(k){k=String(k);if(NOTC[k])return null;if(/^GB-/.test(k))return"GB";if(/^PS-/.test(k))return"PS";return k;}
+function ck(k){k=String(k);if(NOTC[k])return null;if(/^GB-/.test(k))return"GB";if(/^PS(-|$)/.test(k))return"IL";return k;}
 function nCountries(st,list){var o={};list.forEach(function(i){var c=ck(i.k);if(c&&(!st||st[i.k]))o[c]=1;});return Object.keys(o).length;}
 function paint(){
  if(!S[cur])return;var st=S[cur],sel=cur==="world"?"#g [data-k]":"#fg-"+cur+" [data-k]"+(cur==="us"?",#tg [data-k]":"");
@@ -335,7 +338,7 @@ function pillDrag(box,pick){var pl=box.querySelector(".pill"),st=null;
  box.addEventListener("pointerup",end);box.addEventListener("pointercancel",end);}
 pillDrag($("tabs"),function(i){go(TABS[i][0]);});
 /* each tab has its own address (/globe, /usa, /canada, /leaderboard) so Back/Forward move between tabs */
-function go(t,pop){if(!pop&&t!==cur)try{history.pushState({t:t},"",PATH[t]);}catch(e){}if(t===cur)return;cur=t;render();window.scrollTo(0,0);}
+function go(t,pop){if(!pop&&t!==cur)try{history.pushState({t:t},"",t==="board"&&window.LB?LB.bpath():PATH[t]);}catch(e){}if(t===cur)return;cur=t;render();window.scrollTo(0,0);}
 window.addEventListener("popstate",function(){var t=tabOf(location.pathname);if(t!==cur)go(t,1);});
 function render(){
  var tb=$("tabs");TABS.forEach(function(t,i){var b=tb.querySelector('[data-t="'+t[0]+'"]'),on=t[0]===cur;b.className=on?"on":"";if(on){b.setAttribute("aria-current","page");tb.style.setProperty("--i",i);}else b.removeAttribute("aria-current");});
@@ -404,7 +407,7 @@ if(ok){
 }
 var HI=false,csH=null,csM=null,TRK={},UKL=null,DRAG=false,rq=0,idT=0;
 function req(){DRAG=true;clearTimeout(idT);idT=setTimeout(function(){DRAG=false;draw();},160);if(!rq){rq=1;requestAnimationFrame(function(){rq=0;draw();});}}
-var ISO="AF,AL,DZ,AD,AO,AG,AR,AM,AU,AT,AZ,BS,BH,BD,BB,BY,BE,BZ,BJ,BT,BO,BA,BW,BR,BN,BG,BF,BI,CV,KH,CM,CA,CF,TD,CL,CN,CO,KM,CG,CD,CR,CI,HR,CU,CY,CZ,DK,DJ,DM,DO,EC,EG,SV,GQ,ER,EE,SZ,ET,FJ,FI,FR,GA,GM,GE,DE,GH,GR,GD,GT,GN,GW,GY,HT,HN,HU,IS,IN,ID,IR,IQ,IE,IL,IT,JM,JP,JO,KZ,KE,KI,XK,KW,KG,LA,LV,LB,LS,LR,LY,LI,LT,LU,MG,MW,MY,MV,ML,MT,MH,MR,MU,MX,FM,MD,MC,MN,ME,MA,MZ,MM,NA,NR,NP,NL,NZ,NI,NE,NG,KP,MK,NO,OM,PK,PW,PS,PA,PG,PY,PE,PH,PL,PT,QA,RO,RU,RW,KN,LC,VC,WS,SM,ST,SA,SN,RS,SC,SL,SG,SK,SI,SB,SO,ZA,KR,SS,ES,LK,SD,SR,SE,CH,SY,TW,TJ,TZ,TH,TL,TG,TO,TT,TN,TR,TM,TV,UG,UA,AE,GB,US,UY,UZ,VU,VA,VE,VN,YE,ZM,ZW";
+var ISO="AF,AL,DZ,AD,AO,AG,AR,AM,AU,AT,AZ,BS,BH,BD,BB,BY,BE,BZ,BJ,BT,BO,BA,BW,BR,BN,BG,BF,BI,CV,KH,CM,CA,CF,TD,CL,CN,CO,KM,CG,CD,CR,CI,HR,CU,CY,CZ,DK,DJ,DM,DO,EC,EG,SV,GQ,ER,EE,SZ,ET,FJ,FI,FR,GA,GM,GE,DE,GH,GR,GD,GT,GN,GW,GY,HT,HN,HU,IS,IN,ID,IR,IQ,IE,IL,IT,JM,JP,JO,KZ,KE,KI,XK,KW,KG,LA,LV,LB,LS,LR,LY,LI,LT,LU,MG,MW,MY,MV,ML,MT,MH,MR,MU,MX,FM,MD,MC,MN,ME,MA,MZ,MM,NA,NR,NP,NL,NZ,NI,NE,NG,KP,MK,NO,OM,PK,PW,PA,PG,PY,PE,PH,PL,PT,QA,RO,RU,RW,KN,LC,VC,WS,SM,ST,SA,SN,RS,SC,SL,SG,SK,SI,SB,SO,ZA,KR,SS,ES,LK,SD,SR,SE,CH,SY,TW,TJ,TZ,TH,TL,TG,TO,TT,TN,TR,TM,TV,UG,UA,AE,GB,US,UY,UZ,VU,VA,VE,VN,YE,ZM,ZW";
 var I2="VAT:VA,MCO:MC,SMR:SM,LIE:LI,AND:AD,MLT:MT,LUX:LU,SGP:SG,BHR:BH,MDV:MV,SYC:SC,MUS:MU,COM:KM,STP:ST,CPV:CV,BRB:BB,LCA:LC,VCT:VC,GRD:GD,ATG:AG,KNA:KN,DMA:DM,PLW:PW,MHL:MH,FSM:FM,NRU:NR,KIR:KI,TUV:TV,TON:TO,WSM:WS,BRN:BN,TLS:TL,SWZ:SZ,HKG:HK,MAC:MO";
 function norm(s){return String(s).toLowerCase().normalize("NFD").replace(/[^a-z]/g,"");}
 function diss(polys){
@@ -423,22 +426,24 @@ function ukf(U){
   g.geometry.coordinates.forEach(function(p){P[k].push(p);});});
  var out=[];for(var k in P)if(P[k].length)out.push({type:"Feature",id:"GB-"+k,properties:{id:"GB-"+k,name:N[k]},geometry:{type:"MultiPolygon",coordinates:diss(P[k])}});
  return out.length>=3?out:null;}
-function splitPS(f){var g=f.geometry,ps=g.type==="Polygon"?[g.coordinates]:g.coordinates,w=[],z=[];function m2(id,n,c){return{type:"Feature",properties:{id:id,name:n},geometry:{type:"MultiPolygon",coordinates:c}};}ps.forEach(function(p){var s=0,r=p[0];r.forEach(function(q){s+=q[0];});(s/r.length<34.75?z:w).push(p);});if(!w.length||!z.length)return[f];return[m2("PS-WB","Judea & Samaria",w),m2("PS-GZ","Gaza",z)];}
-function prep(G,u){return G.features.filter(function(f){var i=f.properties.id;return !(u&&i==="GB");}).reduce(function(a,f){return a.concat(f.properties.id==="PS"?splitPS(f):[f]);},[]).concat(u||[]).map(rw);}
+function prep(G,u){var fs=G.features.filter(function(f){var i=f.properties.id;return !(u&&i==="GB");}).concat(u||[]).map(rw),il=null,ex=[];
+ fs.forEach(function(f){if(f.id==="IL")il=f;else if(f.id==="PS")ex=ex.concat(f.geometry.coordinates);});
+ if(il&&ex.length){il.geometry.coordinates=diss(il.geometry.coordinates.concat(ex));fs=fs.filter(function(f){return f.id!=="PS";});}
+ return fs;}
 function terr(G){G.features.forEach(function(f){var i=String(f.properties.id).replace(/^US-/,"");if(["PR","VI","GU","AS","MP"].indexOf(i)>=0)TF[i]=rw(f);});TFv++;}
 function mkSel(g,data){d3.select(g).selectAll("*").remove();return d3.select(g).selectAll("path").data(data).enter().append("path").attr("data-k",function(f){return TRK[f.id]?f.id:null;}).attr("class",function(f){return"c v0"+(TRK[f.id]?"":" o");});}
 function buildAm(L,U){
  var u=ukf(U),low=prep(L,u),oldNM=NM.world,hv={};UKL=u;TRK={};
  ISO.split(",").forEach(function(c){TRK[c]=1;});TRK.GL=1;TRK.AQ=1;TRK.HK=1;TRK.MO=1;if(u){delete TRK.GB;u.forEach(function(f){TRK[f.properties.id]=1;});}
  low.forEach(function(f){TRK[f.id]=1;});/* every place on the map is editable, territories included */
- low.forEach(function(f){hv[f.id]=1;});if(hv["PS-WB"]){delete TRK.PS;TRK["PS-WB"]=1;TRK["PS-GZ"]=1;}IT.world=[];NM.world={};
+ low.forEach(function(f){hv[f.id]=1;});IT.world=[];NM.world={};
  WF=low.filter(function(f){return TRK[f.id];});WF.forEach(function(f){add("world",f.id,f.properties.name);});
  MKs=[];var m2={};I2.split(",").forEach(function(s){var a=s.split(":");m2[a[0]]=a[1];});
  MK.split(";").forEach(function(s){var a=s.split(","),k=m2[a[0]];if(k&&!hv[k]){MKs.push({k:k,name:a[1],lat:+a[2],lon:+a[3],rad:({LUX:.45,BRN:.6,TLS:.7,SWZ:.8,CPV:.5,MDV:.5,MUS:.4})[a[0]]||.35,h:hz(a[0])});add("world",k,a[1]);LL[k]=[+a[3],+a[2]];}});
  /* tiny places without an outline (or too small to tap) get a dot too */
  [["ES-CE","Ceuta",35.89,-5.32,.12],["ES-ML","Melilla",35.29,-2.94,.12],["GI","Gibraltar",36.14,-5.35,.1]].forEach(function(a){MKs.push({k:a[0],name:a[1],lat:a[2],lon:a[3],rad:a[4],h:hz(a[0])});if(!NM.world[a[0]])add("world",a[0],a[1]);LL[a[0]]=[a[3],a[2]];});
  var nbn={},nw={};IT.world.forEach(function(i){nbn[norm(i.name)]=i.k;});
- for(var k in S.world){if(NM.world[k])nw[k]=S.world[k];else{var n=nbn[norm(oldNM[k]||"")];if(n)nw[n]=S.world[k];}}S.world=nw;save();
+ for(var k in S.world){if(/^PS(-|$)/.test(k)){nw.IL=Math.max(nw.IL||0,S.world.IL||0,S.world[k]);continue;}if(NM.world[k])nw[k]=Math.max(nw[k]||0,S.world[k]);else{var n=nbn[norm(oldNM[k]||"")];if(n)nw[n]=S.world[k];}}S.world=nw;save();
  cs=mkSel("#cs",low);d3.select("#ms").selectAll("*").remove();
  ms=d3.select("#ms").selectAll("path").data(MKs).enter().append("path").attr("data-k",function(d){return d.k;}).attr("class","c v0");
  SEL.world=null;draw();paint();panel();score();if(cur==="us")render();
@@ -461,7 +466,7 @@ if(ok)startAm();
 <script>
 /* Leaderboard UI + sync. Talks to /api (src/worker.js). This browser's entry lives in localStorage "tg3me". */
 var LB=(function(){
- var ME=null,MR=null,CFG=null,BD=null,BDt=0,sT=0,sv=0,bt="world",D={},TT=0;
+ var ME=null,MR=null,CFG=null,BD=null,BDt=0,sT=0,sv=0,bt=boardOf(location.pathname)||"world",D={},TT=0;
  var TN={world:"Globe",us:"US states",ca:"Canada"};
  try{ME=JSON.parse(localStorage.getItem("tg3me")||"null");}catch(e){}
  function setME(m){ME=m;try{m?localStorage.setItem("tg3me",JSON.stringify(m)):localStorage.removeItem("tg3me");}catch(e){}}
@@ -552,7 +557,7 @@ var LB=(function(){
 
  /* ---- popup (one <dialog>, several views) ---- */
  /* every popup gets its own history entry (#join, #pin, #passport, #settings, #welcome-back), so Back closes it */
- function hname(){return({claim:"welcome-back",name:D.share?"share":"join",pin:"pin",link:"link",img:"passport",me:"settings"})[D.v]||"popup";}
+ function hname(){return({claim:"welcome-back",name:D.share?"share":"join",pin:"pin",link:"link",img:"passport/"+SLUG[D.t||"world"],me:"settings"})[D.v]||"popup";}
  function hsync(){var d=$("dlg");if(!d.open)return;var u=location.pathname+location.search+"#"+hname();
   try{if(history.state&&history.state.dlg){if(location.hash!=="#"+hname())history.replaceState({t:cur,dlg:1},"",u);}else history.pushState({t:cur,dlg:1},"",u);}catch(e){}}
  function dlg(v,o){D=o||{};D.v=v;D.err="";D.ok="";D.busy=0;ddraw();var d=$("dlg");if(!d.open)d.showModal();hsync();}
@@ -668,7 +673,7 @@ var LB=(function(){
   if(ME){var r=MR&&MR.ranks[bt];tx.appendChild(el("b","",ME.name));var sm=el("small");if(r&&r.rank){sm.appendChild(el("em","","#"+r.rank));sm.appendChild(document.createTextNode(" of "+r.total+" on "+TN[bt]));}else sm.textContent="Color places on the "+TN[bt]+" map to get ranked";tx.appendChild(sm);
    y.appendChild(B("Share","pr",function(){share(bt);}));var g=ico(B("","ic",function(){dlg("me");}),"gear");g.title="Your entry";g.setAttribute("aria-label","Your entry");y.appendChild(g);}
   else{tx.appendChild(el("b","","See where you rank"));tx.appendChild(el("small","","No account or email needed."));y.appendChild(B("Join","pr",function(){dlg("name",{});}));}
-  c.appendChild(y);c.appendChild(seg(bt,function(t){bt=t;draw();},0,"lb"));
+  c.appendChild(y);c.appendChild(seg(bt,function(t){bt=t;try{history.pushState({t:"board"},"",bpath());}catch(e){}draw();},0,"lb"));
   if(!BD){c.appendChild(el("p","mu","Loading scores…"));return;}
   var b=BD[bt],my=ME&&MR&&MR.ranks[bt],rows=b.rows,tot=b.total;
   /* the board is cached for ~30 s, so put this player's fresh score into it */
@@ -680,13 +685,16 @@ var LB=(function(){
   if(ME&&!mine&&my&&my.rank){ol.appendChild(el("li","gap","⋯"));ol.appendChild(li(my.rank,ME.name,my.pts,my.n,1));}
   c.appendChild(ol);c.appendChild(el("p","ft",tot+(tot===1?" traveler":" travelers")+" · points · places visited"));}
  function show(){draw();loadBoard();}
+ /* each board has its own address: /leaderboard/globe, /leaderboard/usa, /leaderboard/canada */
+ function bpath(){return"/leaderboard/"+SLUG[bt];}
+ window.addEventListener("popstate",function(){var b=boardOf(location.pathname);if(b&&b!==bt){bt=b;draw();}});
  /* rank badge next to the score on map tabs */
  function chip(){var e=$("rkc");if(TN[cur])bt=cur;var r=ME&&MR&&MR.ranks&&MR.ranks[cur],b=e.querySelector("b");b.className="";
   if(!CFG){e.style.display="none";return;}e.style.display="";
   if(!ME){b.textContent="Join";b.className="j";e.title="Join the leaderboard";}else if(r&&r.rank){b.textContent="#"+r.rank;b.appendChild(el("i","","/"+r.total));e.title="Your rank on the "+TN[cur]+" leaderboard";}else{b.textContent="–";e.title="Color places to get ranked";}}
 
  /* ---- passport image (1080×1920, story size): hatched map, flag row, travel stats and a machine-readable strip ending in the site address ---- */
- var CONT=(function(){var m={};"AF:DZ,AO,BJ,BW,BF,BI,CV,CM,CF,TD,KM,CG,CD,CI,DJ,EG,GQ,ER,SZ,ET,GA,GM,GH,GN,GW,KE,LS,LR,LY,MG,MW,ML,MR,MU,MA,MZ,NA,NE,NG,RW,ST,SN,SC,SL,SO,ZA,SS,SD,TZ,TG,TN,UG,ZM,ZW;AS:AF,AM,AZ,BH,BD,BT,BN,KH,CN,GE,IN,ID,IR,IQ,IL,JP,JO,KZ,KW,KG,LA,LB,MY,MV,MN,MM,NP,KP,OM,PK,PS,PS-WB,PS-GZ,PH,QA,SA,SG,KR,LK,SY,TW,TJ,TH,TL,TR,TM,AE,UZ,VN,YE,HK,MO;EU:AL,AD,AT,BY,BE,BA,BG,HR,CY,CZ,DK,EE,FI,FR,DE,GR,HU,IS,IE,IT,XK,LV,LI,LT,LU,MT,MD,MC,ME,NL,MK,NO,PL,PT,RO,RU,SM,RS,SK,SI,ES,SE,CH,UA,GB,GB-ENG,GB-SCT,GB-WLS,GB-NIR,VA;NA:AG,BS,BB,BZ,CA,CR,CU,DM,DO,SV,GD,GT,HT,HN,JM,MX,NI,PA,KN,LC,VC,TT,US,GL;SA:AR,BO,BR,CL,CO,EC,GY,PY,PE,SR,UY,VE;OC:AU,FJ,KI,MH,FM,NR,NZ,PW,PG,WS,SB,TO,TV,VU;AN:AQ".split(";").forEach(function(g){var p=g.split(":");p[1].split(",").forEach(function(c){m[c]=p[0];});});return m;})();
+ var CONT=(function(){var m={};"AF:DZ,AO,BJ,BW,BF,BI,CV,CM,CF,TD,KM,CG,CD,CI,DJ,EG,GQ,ER,SZ,ET,GA,GM,GH,GN,GW,KE,LS,LR,LY,MG,MW,ML,MR,MU,MA,MZ,NA,NE,NG,RW,ST,SN,SC,SL,SO,ZA,SS,SD,TZ,TG,TN,UG,ZM,ZW;AS:AF,AM,AZ,BH,BD,BT,BN,KH,CN,GE,IN,ID,IR,IQ,IL,JP,JO,KZ,KW,KG,LA,LB,MY,MV,MN,MM,NP,KP,OM,PK,PH,QA,SA,SG,KR,LK,SY,TW,TJ,TH,TL,TR,TM,AE,UZ,VN,YE,HK,MO;EU:AL,AD,AT,BY,BE,BA,BG,HR,CY,CZ,DK,EE,FI,FR,DE,GR,HU,IS,IE,IT,XK,LV,LI,LT,LU,MT,MD,MC,ME,NL,MK,NO,PL,PT,RO,RU,SM,RS,SK,SI,ES,SE,CH,UA,GB,GB-ENG,GB-SCT,GB-WLS,GB-NIR,VA;NA:AG,BS,BB,BZ,CA,CR,CU,DM,DO,SV,GD,GT,HT,HN,JM,MX,NI,PA,KN,LC,VC,TT,US,GL;SA:AR,BO,BR,CL,CO,EC,GY,PY,PE,SR,UY,VE;OC:AU,FJ,KI,MH,FM,NR,NZ,PW,PG,WS,SB,TO,TV,VU;AN:AQ".split(";").forEach(function(g){var p=g.split(":");p[1].split(",").forEach(function(c){m[c]=p[0];});});return m;})();
  function groups(o){var m={};for(var k in o)o[k].split(" ").forEach(function(c){m[c]=k;});return m;}
  var USR=groups({NE:"CT ME MA NH RI VT NJ NY PA",MW:"IL IN MI OH WI IA KS MN MO NE ND SD",S:"DE FL GA MD NC SC VA DC WV AL KY MS TN AR LA OK TX",W:"AZ CO ID MT NV NM UT WY AK CA HI OR WA"});
  var CAR=groups({ATL:"NB NL NS PE",CEN:"ON QC",PRA:"AB MB SK",BC:"BC",NOR:"NT NU YT"});
@@ -709,7 +717,7 @@ var LB=(function(){
  /* flag rows: as many rows as needed (no "+N"), each centered; fewer, larger flags per row when possible */
  function flayout(n){var r=1,per,step;for(;r<=8;r++){per=Math.ceil(n/r);step=Math.min(46,860/Math.max(per,1));if(step>=40||r===8)break;}var R=Math.min(31,step*.68);return{r:r,per:per,step:step,R:R,h:n?r*2*R+(r-1)*10:40};}
  /* flag file for a place: the UK nations all use the UK flag; places without their own flag use their country's */
- function fcode(k){k=String(k);return/^GB-/.test(k)?"gb":/^PS-/.test(k)?"ps":/^UM-/.test(k)?"um":/^ES-/.test(k)?"es":k==="GO"||k==="JU"?"tf":k.toLowerCase();}
+ function fcode(k){k=String(k);return/^GB-/.test(k)?"gb":/^PS(-|$)/.test(k)?"il":/^UM-/.test(k)?"um":/^ES-/.test(k)?"es":k==="GO"||k==="JU"?"tf":k.toLowerCase();}
  /* round flags from the flag-icons package; size is added to the SVG so every browser can draw it onto the canvas */
  function flagImg(code){if(!FLC[code])FLC[code]=fetch("https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/flags/1x1/"+code+".svg").then(function(r){if(!r.ok)throw 0;return r.text();})
   .then(function(s){var u=URL.createObjectURL(new Blob([s.replace("<svg ",'<svg width="512" height="512" ')],{type:"image/svg+xml"}));
@@ -792,13 +800,14 @@ var LB=(function(){
  window.addEventListener("popstate",function(e){var d=$("dlg"),st=e.state||{};
   if(d.open&&!st.dlg)d.close();
   else if(!d.open&&st.dlg)try{history.replaceState({t:cur},"",location.pathname+location.search);}catch(x){}});
+ if(location.hash&&!/^#me=/.test(location.hash))try{history.replaceState(null,"",location.pathname+location.search);}catch(e){}
  var h=/^#me=([0-9a-f-]{36})\.([A-Za-z0-9_-]{20,})$/.exec(location.hash),cl=null;
  if(h){try{history.replaceState(null,"",location.pathname+location.search);}catch(e){}
   if(!(ME&&ME.id===h[1]))cl={id:h[1],link:h[2]};else if(!ME.link){ME.link=h[2];setME(ME);}}
  call("GET","/config").then(function(j){CFG=j;},function(){CFG=false;}).then(function(){chip();
   if(cl){if(CFG)dlg("claim",cl);else toast("This edit link can't be opened here.");}
   if(CFG&&ME)return pull();}).then(function(){loadBoard();if(cur==="board")show();});
- return{touch:touch,show:show,chip:chip};
+ return{touch:touch,show:show,chip:chip,bpath:bpath};
 })();
 </script>
 </body></html>

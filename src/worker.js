@@ -13,7 +13,7 @@ const CAP = { world: 340, us: 60, ca: 13 }; // max places per tab (a bit above t
 // Globe places that are not countries (territories etc.): they earn points but don't count toward "countries".
 // England/Scotland/Wales/N. Ireland count as one country (GB). Keep in sync with public/index.html.
 const TERRITORIES = new Set("BV,GI,GO,JU,UM-DQ,UM-FQ,UM-HQ,UM-JQ,UM-MQ,UM-WQ,BQ,WF,VI,VG,TK,TC,SX,PM,SH,GS,EH,RE,PF,PR,PN,SJ,NU,NF,NC,YT,MQ,MS,MP,MF,MO,JE,IO,IM,HM,HK,GU,GF,GL,GP,GG,FO,FK,KY,CX,CW,CK,CC,BM,BL,TF,AQ,AS,AX,AI,AW,ES-CE,ES-ML".split(","));
-const countryOf = (k) => (TERRITORIES.has(k) ? null : /^GB-/.test(k) ? "GB" : /^PS-/.test(k) ? "PS" : k);
+const countryOf = (k) => (TERRITORIES.has(k) ? null : /^GB-/.test(k) ? "GB" : /^PS(-|$)/.test(k) ? "IL" : k);
 const KEY = /^[A-Za-z0-9][A-Za-z0-9 .'-]{0,39}$/;
 const MAX_BODY = 32 * 1024;
 const BOARD_SIZE = 100;
@@ -37,7 +37,7 @@ class HttpError extends Error {
   }
 }
 
-const APP_PATHS = new Set(["/globe", "/usa", "/canada", "/leaderboard"]);
+const APP_PATHS = new Set(["/globe", "/usa", "/canada", "/leaderboard", "/leaderboard/globe", "/leaderboard/usa", "/leaderboard/canada"]);
 
 export default {
   async fetch(req, env, ctx) {

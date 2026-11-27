@@ -11,7 +11,7 @@ const env = { DB: { prepare: (s) => stmt(s), batch: (ss) => q({ batch: ss.map((s
   /* optional: TURNSTILE_SITE_KEY=1x00000000000000000000AA TURNSTILE_SECRET=1x0000000000000000000000000000000AA (Cloudflare test keys, always pass) */
   ...(process.env.TURNSTILE_SITE_KEY && { TURNSTILE_SITE_KEY: process.env.TURNSTILE_SITE_KEY, TURNSTILE_SECRET: process.env.TURNSTILE_SECRET }) };
 const T = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".png": "image/png", ".svg": "image/svg+xml" };
-const APP = new Set(["/globe", "/usa", "/canada", "/leaderboard"]); // tab addresses serve the same page, like the worker
+const APP = new Set(["/globe", "/usa", "/canada", "/leaderboard", "/leaderboard/globe", "/leaderboard/usa", "/leaderboard/canada"]); // tab addresses serve the same page, like the worker
 http.createServer(async (req, res) => {
   const u = new URL(req.url, "http://localhost:" + port);
   if (u.pathname.startsWith("/api/")) {

@@ -25,7 +25,7 @@ This repo builds on that original with the author's permission. Thank you!
 | `src/worker.js` | Cloudflare Worker: serves `public/` and the `/api/*` leaderboard API |
 | `schema.sql` | Database tables (Cloudflare D1) |
 | `wrangler.jsonc` | Cloudflare config |
-| `tools/` | Local dev server and API tests that need no npm packages (`sh tools/dev.sh`) |
+| `tools/` | Local dev server and API tests (`sh tools/dev.sh`), and `new-link.mjs` for replacing a lost edit link. No npm packages. |
 | `SETUP.md` | One-time Cloudflare setup (dashboard only) and local development |
 
 Without the server (e.g. opening `public/index.html` directly) the map works as before and the Leaderboard tab says the leaderboard isn't available.
